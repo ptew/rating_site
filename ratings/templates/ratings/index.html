@@ -1,0 +1,12 @@
+{% block content %}
+<h1>Advice List</h1>
+{% if advice_list %}
+    <ol>
+    {% for advice in advice_list %}
+        <li><a href="{% url 'vote' advice.id %}">{{ advice.company }}</a></li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No advice is available.</p>
+{% endif %}
+{% endblock %}

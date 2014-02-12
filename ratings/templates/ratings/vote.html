@@ -1,0 +1,51 @@
+{% load dajaxice_templatetags %}
+
+<head>
+	{% dajaxice_js_import %}
+	<title>{% block title %}{% endblock %}</title>
+	
+	<link href"{{STATIC_URL}}/css/rating.css" rel="stylesheet">
+
+	<!-- Star Rating System -->
+	<script src="{{STATIC_URL}}/js/jquery.js"></script>
+
+	<script src="{{STATIC_URL}}/js/jquery.rateit.js"></script>
+	<link href="{{STATIC_URL}}/css/rateit.css" rel="stylesheet">
+	
+
+	<script type="text/javascript">
+    	$(function () { $('#rating').rateit({ max: 5, step: 1, backingfld: '#backing' }); });
+
+    	function my_callback(data){
+    		alert(data.message);
+    	};
+
+	</script>
+</head>
+
+{% block content %}
+<h1>{{ advice.company }} ({{advice.ticker}})</h1>
+<ul style="list-style: none;">
+    <li>Price Target: ${{advice.price_target}}</li>
+    <li>Time Frame: {{advice.time_frame}} months</li>
+</ul>
+<p>{{advice.content}}</p>
+<br>
+<input type="hidden" id="backing">
+<div id="rating"></div>
+
+
+<script type="text/javascript">
+    $("#rating").bind('rated reset', function (event, value) {
+		var rater = $(this);
+		//if the use pressed reset, it will get value: 0 (to be compatible with the HTML range control), we could check if e.type == 'reset', and then set the value to  null .
+		var value = rater.rateit('value');
+
+		//Disable Voting
+		rater.rateit('readonly', true);
+
+		Dajaxice.ratings.vote(my_callback, {'value':value});
+    });
+</script> 
+
+{% endblock %}
