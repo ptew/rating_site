@@ -1,17 +1,12 @@
 {% load dajaxice_templatetags %}
 
-<head>
+{% block head %}
 	{% dajaxice_js_import %}
 	<title>{% block title %}{% endblock %}</title>
 	
 	<link href"{{STATIC_URL}}/css/rating.css" rel="stylesheet">
-
-	<!-- Star Rating System -->
-	<script src="{{STATIC_URL}}/js/jquery.js"></script>
-
 	<script src="{{STATIC_URL}}/js/jquery.rateit.js"></script>
 	<link href="{{STATIC_URL}}/css/rateit.css" rel="stylesheet">
-	
 
 	<script type="text/javascript">
     	$(function () { $('#rating').rateit({ max: 5, step: 1, backingfld: '#backing' }); });
@@ -43,6 +38,8 @@
 
 		//Disable Voting
 		rater.rateit('readonly', true);
+		advice.vote_count += 1
+		advice.save()
 
 		Dajaxice.ratings.vote(my_callback, {'value':value});
     });

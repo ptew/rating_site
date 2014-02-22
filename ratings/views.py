@@ -11,6 +11,10 @@ def index(request):
 		})
 	return HttpResponse(template.render(context))
 
-def vote(request, advice_id):
+def detail(request, advice_id):
 	advice = get_object_or_404(Advice, pk=advice_id)
-	return render(request, 'ratings/vote.html', {'advice':advice})
+	advice.view_count += 1
+	advice.save()
+	return render(request, 'ratings/detail.html', {'advice':advice})
+
+

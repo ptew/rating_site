@@ -1,12 +1,26 @@
-{% block content %}
-<h1>Advice List</h1>
-{% if advice_list %}
-    <ol>
-    {% for advice in advice_list %}
-        <li><a href="{% url 'vote' advice.id %}">{{ advice.company }}</a></li>
-    {% endfor %}
-    </ol>
-{% else %}
-    <p>No advice is available.</p>
-{% endif %}
+{% extends "base.html" %}
+
+{% block title %}
+Ratings Home Page
+{% endblock %}
+
+{% block body %}
+<div class="container">
+
+  <div class="advice_list">
+    {% block content %}
+      <h1>Advice List</h1>
+      {% if advice_list %}
+          <ol>
+          {% for advice in advice_list %}
+              <li><a href="{% url 'detail' advice.id %}">{{ advice.company }}</a></li>
+          {% endfor %}
+          </ol>
+      {% else %}
+          <p>No advice is available.</p>
+      {% endif %}
+    {% endblock %}
+  </div>
+
+</div><!-- /.container -->
 {% endblock %}

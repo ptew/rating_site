@@ -1,0 +1,68 @@
+/*!
+ * Bootstrap v3.1.1 (http://getbootstrap.com)
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+/*! normalize.css v3.0.0 | MIT License | git.io/normalize */
+
+body {
+	font: 13px/1.231 sans-serif;
+}
+
+.custom_nav {
+  position: relative;
+  background-color: #161c23;
+  max-height: 40px;
+  min-height: 40px;
+  margin: 0px;
+  padding: 0px;
+  border-bottom: 1px solid #080A0D;
+}
+
+.navbar-inverse .nav_links > .active > a {
+	background-color: #1C242C;
+}
+
+.navbar-header a,
+.nav_links a{
+	padding: 9px 18px 4px;
+color: #9ea6ac;
+border-right: 1px solid #080A0D;
+border-left: 1px solid #18242e;
+}
+
+.nav_links > li > a {
+	border-left: 1px solid #18242e;
+	padding-top: 10px;
+    padding-bottom: 9px;
+}
+
+.navbar-inverse .nav_links > li > a,
+.navbar-inverse .nav_project_name {
+	color: #9EA6AC;
+}
+
+.advice_list {
+  padding: 40px 15px;
+  text-align: left;
+}
+
+.banner {
+	height: 90px;
+	width: 100%;
+	background-color: #1C242C;
+	border-width: 1px;
+	border-top: 1px solid #26313C;
+}
+
+.nav_links {
+	font-size: 13px;
+}
+
+.nav_project_name {
+	font-size: 13px;
+	padding-top: 10px;
+    padding-bottom: 9px;
+    max-height: 39px;
+}

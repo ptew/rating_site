@@ -94,7 +94,7 @@ STATICFILES_FINDERS = (
     'dajaxice.finders.DajaxiceFinder',
 )
 
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'ratings/templates/ratings')]
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
