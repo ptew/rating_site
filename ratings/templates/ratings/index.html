@@ -1,21 +1,31 @@
 {% extends "base.html" %}
 
 {% block title %}
-Ratings Home Page
+Advice Ratings Home Page
 {% endblock %}
 
 {% block body %}
 <div class="container">
 
-  <div class="advice_list">
+  <div class="advice_list large-5 columns">
     {% block content %}
-      <h1>Advice List</h1>
+      <h1>Rating List</h1>
       {% if advice_list %}
-          <ol>
+        <div class="large-6 columns">
           {% for advice in advice_list %}
-              <li><a href="{% url 'detail' advice.id %}">{{ advice.company }}</a></li>
+
+          <!-- Feed Entry -->
+          <div class="row">
+            <div class="large-10 columns">
+              <a class= "advice_title" href="{% url 'detail' advice.id %}">{{ advice.company }}</a>
+            </div>
+            <h4 class="company_detail"><small> Reputation: 5 Status: 5</small></h4>
+          </div>
+          <!-- End Feed Entry -->
+          <hr>
+              <!-- <li><a href="{% url 'detail' advice.id %}">{{ advice.company }}</a></li> -->
           {% endfor %}
-          </ol>
+        </div>
       {% else %}
           <p>No advice is available.</p>
       {% endif %}

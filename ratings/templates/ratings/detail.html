@@ -1,48 +1,66 @@
+{% extends "base.html" %}
 {% load dajaxice_templatetags %}
+
+{% block title %}
+Advice Ratings -- {{advice.company}}
+{% endblock %}
 
 {% block head %}
 	{% dajaxice_js_import %}
-	<title>{% block title %}{% endblock %}</title>
 	
 	<link href"{{STATIC_URL}}/css/rating.css" rel="stylesheet">
 	<script src="{{STATIC_URL}}/js/jquery.rateit.js"></script>
 	<link href="{{STATIC_URL}}/css/rateit.css" rel="stylesheet">
 
 	<script type="text/javascript">
-    	$(function () { $('#rating').rateit({ max: 5, step: 1, backingfld: '#backing' }); });
-
     	function my_callback(data){
     		alert(data.message);
     	};
 
 	</script>
-</head>
+{% endblock %}
 
-{% block content %}
-<h1>{{ advice.company }} ({{advice.ticker}})</h1>
-<ul style="list-style: none;">
-    <li>Price Target: ${{advice.price_target}}</li>
-    <li>Time Frame: {{advice.time_frame}} months</li>
-</ul>
-<p>{{advice.content}}</p>
-<br>
-<input type="hidden" id="backing">
-<div id="rating"></div>
+{% block body %}
 
+	<div class="row">    
+	    
+	    <!-- Main Content Section -->
+	    <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
+	    <div class="company_info large-9 pull-3 columns">
+	      
+	      <h2>{{ advice.company }} <small>{{ advice.ticker }}</small></h2>
+	      <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
+	      <h4><small> Reputation: 5	Status: 5</small></h4>
 
-<script type="text/javascript">
-    $("#rating").bind('rated reset', function (event, value) {
-		var rater = $(this);
-		//if the use pressed reset, it will get value: 0 (to be compatible with the HTML range control), we could check if e.type == 'reset', and then set the value to  null .
-		var value = rater.rateit('value');
+	     
+	      <p>{{advice.content}}</p>
+	      <input type="range" max="5" step="1" id="backing">
+		  <div class="rateit" data-rateit-backingfld="#backing" data-rateit-resetable="false"  data-rateit-ispreset="true"
+    		data-rateit-min="0" data-rateit-max="10">
+		  </div>
+		 <script type="text/javascript">
 
-		//Disable Voting
-		rater.rateit('readonly', true);
-		advice.vote_count += 1
-		advice.save()
+    	$(".rateit").bind('beforerated', function (event) {
+			var rater = $(this);
+			//if the use pressed reset, it will get value: 0 (to be compatible with the HTML range control), we could check if e.type == 'reset', and then set the value to  null .
+			var value = rater.rateit('value');
 
-		Dajaxice.ratings.vote(my_callback, {'value':value});
-    });
-</script> 
+			//Disable Voting
+			rater.rateit('readonly', true);
+
+			Dajaxice.ratings.vote(my_callback, {'value':value});
+	    });
+	    </script>
+	            
+	    </div>
+	    
+	    
+	    <!-- Nav Sidebar -->
+	    <!-- This is source ordered to be pulled to the left on larger screens -->
+	    <div class="company_stats large-3 push columns">
+	    	<h3>Statistics: <h3>
+	    </div>
+	    
+  </div>
 
 {% endblock %}
