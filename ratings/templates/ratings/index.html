@@ -68,12 +68,27 @@ Advice Ratings Home Page
         <p>No advice is available.</p>
       {% endif %}
       <div class="large-12 columns">
-        <form class="form-inline"role="form">
-          <center><button type="submit" class="submit_button btn btn-default">Submit</button></center>
-        </form>
+        <center><button class="submit_button btn btn-default" data-toggle="modal" data-target="#myModal">Submit</button></center>
       </div>
   </div>
     {% endblock %}
 </div><!-- /.container -->
-
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Survey</h4>
+      </div>
+        <div class="modal-body">
+          This will be populated with the survey when I know what it entails.
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
