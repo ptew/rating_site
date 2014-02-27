@@ -1,8 +1,20 @@
 {% extends "base.html" %}
+{% load dajaxice_templatetags %}
 {% load ratings_filters %}
 
 {% block title %}
 Advice Ratings Home Page
+{% endblock %}
+
+{% block head %}
+  {% dajaxice_js_import %}
+
+  <script type="text/javascript">
+      function my_callback(data){
+        alert(data.message);
+      };
+
+  </script>
 {% endblock %}
 
 {% block body %}
@@ -12,27 +24,56 @@ Advice Ratings Home Page
     {% block content %}
       <h1>Rating List</h1>
       {% if advice_list %}
-        <div class="large-6 columns">
           {% for advice in advice_list %}
 
-          <!-- Feed Entry -->
-          <div class="row">
-            <div class="large-10 columns">
-              <a class= "advice_title" href="{% url 'detail' advice.id %}">{{ advice.company }}</a>
-            </div> 
-            <h4 class="company_detail"><small> Reputation:{{advice_rep|get_item:advice}} Status:{{advice_status|get_item:advice}}</small></h4>
-          </div>
-          
-          <!-- End Feed Entry -->
-          <hr>
-              <!-- <li><a href="{% url 'detail' advice.id %}">{{ advice.company }}</a></li> -->
-          {% endfor %}
-        </div>
-      {% else %}
-          <p>No advice is available.</p>
-      {% endif %}
-    {% endblock %}
-  </div>
+            <div class="large-12 columns">
+        
+              <h2>{{ advice.company }} <small>{{ advice.ticker }}</small></h2>
+              <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
+              <h4><small> Reputation:{{advice_rep|get_item:advice}} Status:{{advice_status|get_item:advice}}</small></h4>
+              <p>{{advice.content}}</p>
+              
+              <div class="rating_left">
+                <h4 class="left"><small>Rate Quality: </small></h4>
+                <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
+                <div class="rateit left custom_rating" data-rateit-backingfld="#quality-backing{{forloop.counter}}" data-rateit-resetable="false"  data-rateit-ispreset="true"
+                data-rateit-min="0" data-rateit-max="10"></div>
+              </div>
 
+              <div class="rating_right">
+                <h4 class="left"><small>Rate Performance: </small></h4>
+                <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
+                <div class="rateit left custom_rating" data-rateit-backingfld="#performance-backing{{forloop.counter}}" data-rateit-resetable="false"  data-rateit-ispreset="true"
+                data-rateit-min="0" data-rateit-max="10"></div>
+              </div>
+              <hr>
+            </div>
+          {% endfor %}
+          
+          <script type="text/javascript">
+            $(".rateit").bind('rated reset', function (event) {
+              var rater = $(this);
+              //if the use pressed reset, it will get value: 0 (to be compatible with the HTML range control), 
+              //we could check if e.type == 'reset', and then set the value to null .
+              var value = rater.rateit('value');
+
+              //Disable Voting
+              rater.rateit('readonly', true);
+
+              Dajaxice.ratings.vote(my_callback, {'value':value});
+            });
+          </script>
+
+      {% else %}
+        <p>No advice is available.</p>
+      {% endif %}
+      <div class="large-12 columns">
+        <form class="form-inline"role="form">
+          <center><button type="submit" class="submit_button btn btn-default">Submit</button></center>
+        </form>
+      </div>
+  </div>
+    {% endblock %}
 </div><!-- /.container -->
+
 {% endblock %}

@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.utils import timezone
 from ratings.models import Advice, Profile, UserConnection, User
+from dajaxice.core import dajaxice_functions
 
 def index(request, user_id="0"):
 	param_dictionary = {}

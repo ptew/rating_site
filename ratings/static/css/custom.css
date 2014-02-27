@@ -86,3 +86,31 @@ border-left: 1px solid #18242e;
 .company_info {
 	margin-top: 60px;
 }
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.rating_left {
+	padding-left:20px;
+	float: left;
+}
+
+.rating_right {
+	padding-right:20px;
+	float: right;
+}
+
+.custom_rating {
+	margin-top: 15px;
+	padding-left: 10px;
+}
+
+.submit_button {
+	color: #fff;
+	background-color: #1C314A;
+}
