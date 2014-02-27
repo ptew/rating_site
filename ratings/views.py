@@ -6,13 +6,11 @@ from django.utils import timezone
 from ratings.models import Advice, Profile, UserConnection, User
 from dajaxice.core import dajaxice_functions
 
-def index(request, user_id="0"):
+def index(request, user_id=0):
 	param_dictionary = {}
 	
 	advice_list = Advice.objects.all()
 	param_dictionary['advice_list'] = advice_list
-	
-	user_id = int(user_id)
 	
 	# add callback check to verify they are a registered user
 
