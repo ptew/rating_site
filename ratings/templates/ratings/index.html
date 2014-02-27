@@ -31,7 +31,7 @@ Advice Ratings Home Page
               <h2>{{ advice.company }} <small>{{ advice.ticker }}</small></h2>
               <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
               <h4><small> Reputation:{{advice_rep|get_item:advice}} Status:{{advice_status|get_item:advice}}</small></h4>
-              <p>{{advice.content}}</p>
+              <p class="advice_content">{{advice.content}}</p>
               
               <div class="rating_left">
                 <h4 class="left"><small>Rate Quality: </small></h4>
