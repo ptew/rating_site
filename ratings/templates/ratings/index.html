@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load ratings_filters %}
 
 {% block title %}
 Advice Ratings Home Page
@@ -18,9 +19,10 @@ Advice Ratings Home Page
           <div class="row">
             <div class="large-10 columns">
               <a class= "advice_title" href="{% url 'detail' advice.id %}">{{ advice.company }}</a>
-            </div>
-            <h4 class="company_detail"><small> Reputation: 5 Status: 5</small></h4>
+            </div> 
+            <h4 class="company_detail"><small> Reputation:{{advice_rep|get_item:advice}} Status:{{advice_status|get_item:advice}}</small></h4>
           </div>
+          
           <!-- End Feed Entry -->
           <hr>
               <!-- <li><a href="{% url 'detail' advice.id %}">{{ advice.company }}</a></li> -->

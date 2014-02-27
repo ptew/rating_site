@@ -13,6 +13,14 @@ Advice Ratings -- {{advice.company}}
 	<link href="{{STATIC_URL}}/css/rateit.css" rel="stylesheet">
 
 	<script type="text/javascript">
+    	var profile = Math.floor((Math.random()*4));
+    	window.onload = function(){ 
+    		
+    	}
+    	$('rep').ready(function() {
+
+    	});
+
     	function my_callback(data){
     		alert(data.message);
     	};
@@ -26,11 +34,11 @@ Advice Ratings -- {{advice.company}}
 	    
 	    <!-- Main Content Section -->
 	    <!-- This has been source ordered to come first in the markup (and on small devices) but to be to the right of the nav on larger screens -->
-	    <div class="company_info large-9 pull-3 columns">
+	    <div class="company_info large-9 pull-1 columns">
 	      
 	      <h2>{{ advice.company }} <small>{{ advice.ticker }}</small></h2>
 	      <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
-	      <h4><small> Reputation: 5	Status: 5</small></h4>
+	      <h4><small> Reputation:5 Status:5</small></h4>
 
 	     
 	      <p>{{advice.content}}</p>
