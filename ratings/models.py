@@ -24,10 +24,18 @@ class User(models.Model):
 	user_id = models.IntegerField(default=0)
 	participation_timestamp = models.DateTimeField('date published')
 
-class Vote(models.Model):
+class QualityVote(models.Model):
 	profile = models.ForeignKey(Profile)
 	advice = models.ForeignKey(Advice)
 	user = models.ForeignKey(User)
+	value = models.IntegerField(default=0)
+	timestamp = models.DateTimeField('date published')
+
+class PerformanceVote(models.Model):
+	profile = models.ForeignKey(Profile)
+	advice = models.ForeignKey(Advice)
+	user = models.ForeignKey(User)
+	value = models.IntegerField(default=0)
 	timestamp = models.DateTimeField('date published')
 
 class UserConnection(models.Model):

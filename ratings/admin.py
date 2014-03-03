@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ratings.models import Profile, Advice, Vote
+from ratings.models import Profile, Advice
 # Register your models here.
 
 class AdviceAdmin(admin.ModelAdmin):

@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% load dajaxice_templatetags %}
 {% load ratings_filters %}
@@ -30,21 +31,23 @@ Advice Ratings Home Page
         
               <h2>{{ advice.company }} <small>{{ advice.ticker }}</small></h2>
               <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
+              {% if not is_control%}
               <h4><small> Reputation:{{advice_rep|get_item:advice}} Status:{{advice_status|get_item:advice}}</small></h4>
+              {% endif %}
               <p class="advice_content">{{advice.content}}</p>
               
               <div class="rating_left">
                 <h4 class="left"><small>Rate Quality: </small></h4>
                 <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
-                <div class="rateit left custom_rating" data-rateit-backingfld="#quality-backing{{forloop.counter}}" data-rateit-resetable="false"  data-rateit-ispreset="true"
-                data-rateit-min="0" data-rateit-max="10"></div>
+                <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
               </div>
 
               <div class="rating_right">
                 <h4 class="left"><small>Rate Performance: </small></h4>
                 <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
-                <div class="rateit left custom_rating" data-rateit-backingfld="#performance-backing{{forloop.counter}}" data-rateit-resetable="false"  data-rateit-ispreset="true"
-                data-rateit-min="0" data-rateit-max="10"></div>
+                <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
               </div>
               <hr>
             </div>
@@ -53,14 +56,17 @@ Advice Ratings Home Page
           <script type="text/javascript">
             $(".rateit").bind('rated reset', function (event) {
               var rater = $(this);
-              //if the use pressed reset, it will get value: 0 (to be compatible with the HTML range control), 
-              //we could check if e.type == 'reset', and then set the value to null .
               var value = rater.rateit('value');
 
               //Disable Voting
               rater.rateit('readonly', true);
 
-              Dajaxice.ratings.vote(my_callback, {'value':value});
+              var advice_id = $(rater).data('advice-id');
+              var profile_id = $(rater).data('profile-id');
+              var user_id = $($("#uid")[0]).data('uid');
+              var isPerformance = rater.hasClass("performance");
+              
+              Dajaxice.ratings.vote(my_callback, {'value':value, 'advice_id': advice_id, 'profile_id': profile_id, 'isPerformance': isPerformance, 'user_id': user_id});
             });
           </script>
 
@@ -91,4 +97,5 @@ Advice Ratings Home Page
     </div>
   </div>
 </div>
+<div id="uid" data-uid={{user.user_id}}></div>
 {% endblock %}
