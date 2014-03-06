@@ -57,13 +57,22 @@ def index(request, user_id):
 			profile_dict[advice_piece] = prof
 			advice_dict[advice_piece.pk] = advice_piece
 
+	quality_votes = {}
+	for quality_vote in QualityVote.objects.filter(user = user):
+		quality_votes[quality_vote.advice.company] = quality_vote.value
+
+	performance_votes = {}
+	for performance_vote in PerformanceVote.objects.filter(user = user):
+		performance_votes[performance_vote.advice.company] = performance_vote.value
+
 	param_dictionary['advice_dict'] = advice_dict
 	param_dictionary['advice_rep'] = advice_rep
 	param_dictionary['advice_status'] = advice_status
 	param_dictionary['profile_dict'] = profile_dict
 	param_dictionary['user'] = user
 	param_dictionary['is_control'] = is_control
-
+	param_dictionary['quality_votes'] = quality_votes
+	param_dictionary['performance_votes'] = performance_votes
 
 	return render(request, 'ratings/index.html', param_dictionary)
 
@@ -71,19 +80,17 @@ def detail(request, advice_id):
 	advice = get_object_or_404(Advice, pk=advice_id)
 	return render(request, 'ratings/detail.html', {'advice':advice})
 
-# @dajaxice_register
-# def vote(request, advice_id, profile_id, isPerformance, value, user_id):
-# 	user = get_object_or_404(User, user_id=user_id)
-# 	prof = get_object_or_404(Profile, profile_number = profile_id)
-# 	advice = get_object_or_404(Advice, pk = advice_id)
-# 	time = timezone.now()
-# 	user_vote;
-# 	if bool(isPerformance):
-# 		logging.debug("QualityVote")
-# 		user_vote = PerformanceVote(user=user, profile=prof, timestamp=time, value=value, advice=advice)
-# 		user_vote.save()
-# 	else:
-# 		logging.debug("QualityVote")
-# 		user_vote = QualityVote(user=user, profile=prof, timestamp=time, value=value, advice=advice)
-# 		user_vote.save()
-# 	return simplejson.dumps({'message':'was %s' % value})
+@dajaxice_register
+def vote(request, advice_id, profile_id, isPerformance, value, user_id):
+	user = get_object_or_404(User, user_id=user_id)
+	prof = get_object_or_404(Profile, profile_number = profile_id)
+	advice = get_object_or_404(Advice, pk = advice_id)
+	time = timezone.now()
+	user_vote;
+	if bool(isPerformance):
+		user_vote = PerformanceVote(user=user, profile=prof, timestamp=time, value=value, advice=advice)
+		user_vote.save()
+	else:
+		user_vote = QualityVote(user=user, profile=prof, timestamp=time, value=value, advice=advice)
+		user_vote.save()
+	return simplejson.dumps({'message':'was %s' % value})

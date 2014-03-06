@@ -118,3 +118,28 @@ border-left: 1px solid #18242e;
 .advice_content {
 	font-family: "Open Sans"
 }
+
+div.voted div.rateit
+{
+    background: url(star.gif) left -16px;
+}
+ 
+div.voted div.rateit-hover
+{
+    background: url(star.gif) left -16px;
+}
+ 
+div.voted > div.rateit-selected, div.rateit-present
+{
+    background: url(star.gif) left -16px;
+}
+ 
+div.voted div.rateit-reset
+{
+    background: url(star.gif) left -16px;
+}
+ 
+div.voted div.rateit-reset:hover
+{
+    background: url(star.gif) left -16px;
+}

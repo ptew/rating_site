@@ -12,7 +12,6 @@ Advice Ratings Home Page
 
   <script type="text/javascript">
       function my_callback(data){
-        alert(data.message);
       };
 
   </script>
@@ -36,18 +35,32 @@ Advice Ratings Home Page
               {% endif %}
               <p class="advice_content">{{advice.content}}</p>
               
+
               <div class="rating_left">
                 <h4 class="left"><small>Rate Quality: </small></h4>
+                {% if advice.company in quality_votes %}
+                <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing{{forloop.counter}}">
+                <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                data-rateit-value={{quality_votes|get_item:advice.company}} data-rateit-readonly="true"
+                data-rateit-resetable="false" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                {% else %}
                 <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
                 <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
                 data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                {% endif %}
               </div>
 
               <div class="rating_right">
                 <h4 class="left"><small>Rate Performance: </small></h4>
+                {% if advice.company in performance_votes %}
+                <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing{{forloop.counter}}">
+                <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                 data-rateit-value={{performance_votes|get_item:advice.company}} data-rateit-readonly="true" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                {% else %}
                 <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
                 <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
                 data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                {% endif %}
               </div>
               <hr>
             </div>
