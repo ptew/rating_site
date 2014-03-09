@@ -1,4 +1,4 @@
-from random import randrange
+from random import randrange, shuffle
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import RequestContext, loader
@@ -10,18 +10,17 @@ import logging
 
 def index(request, user_id):
 	param_dictionary = {}
-	
-	advice_list = Advice.objects.all()
-	advice_dict = {}
 
-	param_dictionary['advice_list'] = advice_list
-	
 	# add callback check to verify they are a registered user
-
+	advice_dict = {}
 	advice_rep = {}
 	advice_status = {}
 	profile_dict = {}
 	is_control = False
+
+	advice_list = Advice.objects.all().order_by('?')
+	param_dictionary['advice_list'] = advice_list
+
 
 	user = User.objects.filter(user_id=int(user_id))
 	if user:

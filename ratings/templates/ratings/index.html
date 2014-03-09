@@ -14,53 +14,81 @@ Advice Ratings Home Page
       function my_callback(data){
       };
 
+      $(window).load(function(){
+        $('#loadModal').modal('show');
+    });
+
+    $(function ()  
+      { $("[rel=status]").popover({title: 'Status', content: "Status tells us how well the person is respected."});  
+    });
+    $(function ()  
+      { $("[rel=reputation]").popover({title: 'Reputation', content: "Reputation tells us how well the person is respected."});  
+    });  
   </script>
 {% endblock %}
 
 {% block body %}
 <div class="container">
 
-  <div class="advice_list large-5 columns">
+  <div class="advice_list large-12 columns">
     {% block content %}
-      <h1>Rating List</h1>
       {% if advice_list %}
           {% for advice in advice_list %}
 
-            <div class="large-12 columns">
-        
+            <div class="large-8 columns">
               <h2>{{ advice.company }} <small>{{ advice.ticker }}</small></h2>
-              <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
-              {% if not is_control%}
-              <h4><small> Reputation:{{advice_rep|get_item:advice}} Status:{{advice_status|get_item:advice}}</small></h4>
-              {% endif %}
-              <p class="advice_content">{{advice.content}}</p>
-              
+              <div class="medium-8 columns">
+                <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
+                {% if not is_control%}
+                  <div class="rating_left"> 
+                    <h4 class="left" rel="status" data-trigger="hover"><small>Status: </small></h4>
+                    <div class="rateit left custom_rating" data-rateit-value={{advice_status|get_item:advice}}  data-rateit-max={{advice_status|get_item:advice}} data-rateit-readonly="true"></div>
+                  </div>
 
-              <div class="rating_left">
-                <h4 class="left"><small>Rate Quality: </small></h4>
-                {% if advice.company in quality_votes %}
-                <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing{{forloop.counter}}">
-                <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
-                data-rateit-value={{quality_votes|get_item:advice.company}} data-rateit-readonly="true"
-                data-rateit-resetable="false" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
-                {% else %}
-                <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
-                <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
-                data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  <div class="rating_right">
+                    <h4 class="left " rel="reputation" data-trigger="hover"><small>Reputation: </small></h4>
+                    <div class="rateit left custom_rating" data-rateit-value={{advice_rep|get_item:advice}} data-rateit-max={{advice_rep|get_item:advice}}  data-rateit-readonly="true"></div>
+                  </div>
                 {% endif %}
               </div>
+              <div class="medium-8 columns">
+                <p class="advice_content">{{advice.content}}</p>
+              </div>
+              <div class="company_stats medium-3 columns"><h5>Statistics: <h5>
+                <ul class="statistics">
+                  <li>Stat 1</li>
+                  <li>Stat 2</li>
+                  <li>Stat 3</li>
+                </ul>
+              </div>
+              
+              <div class="large-8 columns">
+                <div class="rating_left">
+                  <h4 class="left"><small>Rate Quality: </small></h4>
+                  {% if advice.company in quality_votes %}
+                  <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing{{forloop.counter}}">
+                  <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                  data-rateit-value={{quality_votes|get_item:advice.company}} data-rateit-readonly="true"
+                  data-rateit-resetable="false" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  {% else %}
+                  <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
+                  <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                  data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  {% endif %}
+                </div>
 
-              <div class="rating_right">
-                <h4 class="left"><small>Rate Performance: </small></h4>
-                {% if advice.company in performance_votes %}
-                <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing{{forloop.counter}}">
-                <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
-                 data-rateit-value={{performance_votes|get_item:advice.company}} data-rateit-readonly="true" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
-                {% else %}
-                <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
-                <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
-                data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
-                {% endif %}
+                <div class="rating_right">
+                  <h4 class="left"><small>Rate Performance: </small></h4>
+                  {% if advice.company in performance_votes %}
+                  <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing{{forloop.counter}}">
+                  <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                   data-rateit-value={{performance_votes|get_item:advice.company}} data-rateit-readonly="true" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  {% else %}
+                  <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
+                  <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                  data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  {% endif %}
+                </div>
               </div>
               <hr>
             </div>
@@ -87,13 +115,13 @@ Advice Ratings Home Page
         <p>No advice is available.</p>
       {% endif %}
       <div class="large-12 columns">
-        <center><button class="submit_button btn btn-default" data-toggle="modal" data-target="#myModal">Submit</button></center>
+        <center><button class="submit_button btn btn-default" data-toggle="modal" data-target="#submitModal">Submit</button></center>
       </div>
   </div>
     {% endblock %}
 </div><!-- /.container -->
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -106,6 +134,22 @@ Advice Ratings Home Page
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="loadModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Welcome!</h4>
+      </div>
+        <div class="modal-body">
+          Here is some info. Please vote!
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
       </div>
     </div>
   </div>
