@@ -117,7 +117,7 @@ border-left: 1px solid #18242e;
 }
 
 .advice_content {
-	font-family: "Open Sans"
+	font-family: "Open Sans";
 }
 
 div.voted div.rateit
@@ -147,4 +147,17 @@ div.voted div.rateit-reset:hover
 
 .statistics {
 	list-style-type: none;
+}
+
+.popover-title{
+    font-family: "Open Sans";
+}
+
+.popover-content{
+    font-family: "Open Sans";
+    font-size: 13px;
+}
+
+.popover {
+	max-width: 200px;
 }

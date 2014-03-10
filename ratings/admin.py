@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ratings.models import Profile, Advice
+from ratings.models import Profile, Advice, World
 # Register your models here.
 
 class AdviceAdmin(admin.ModelAdmin):
@@ -16,5 +16,13 @@ class ProfileAdmin(admin.ModelAdmin):
 	list_display = ('profile_number',)
 	search_fields = ['profile_number']
 
+class WorldAdmin(admin.ModelAdmin):
+	fieldsets = [
+		("World Content", {'fields': ['world_number', 'advice', 'profile']}),
+	]
+	list_display = ('world_number',)
+	search_fields = ['world_number']
+
 admin.site.register(Profile,ProfileAdmin)
 admin.site.register(Advice,AdviceAdmin)
+admin.site.register(World,WorldAdmin)

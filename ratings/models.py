@@ -24,6 +24,15 @@ class User(models.Model):
 	user_id = models.IntegerField(default=0)
 	participation_timestamp = models.DateTimeField('date published')
 
+class Vote(models.Model):
+	profile = models.ForeignKey(Profile)
+	advice = models.ForeignKey(Advice)
+	user = models.ForeignKey(User)
+	value = models.IntegerField(default=0)
+	timestamp = models.DateTimeField('date published')
+	is_performance = models.BooleanField()
+	is_submission = models.BooleanField()
+
 class QualityVote(models.Model):
 	profile = models.ForeignKey(Profile)
 	advice = models.ForeignKey(Advice)
@@ -40,10 +49,9 @@ class PerformanceVote(models.Model):
 
 class UserConnection(models.Model):
 	user = models.ForeignKey(User)
+	world_number = models.IntegerField(default=0)
+
+class World(models.Model):
+	world_number = models.IntegerField(default=0)
 	advice = models.ForeignKey(Advice)
 	profile = models.ForeignKey(Profile)
-
-
-
-
-

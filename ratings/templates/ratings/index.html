@@ -18,6 +18,20 @@ Advice Ratings Home Page
         $('#loadModal').modal('show');
     });
 
+    function submit() {
+      $(".rateit.rated").each( function() {
+          var rater = $(this);
+          var value = rater.rateit('value');
+
+          var advice_id = $(rater).data('advice-id');
+          var profile_id = $(rater).data('profile-id');
+          var user_id = $($("#uid")[0]).data('uid');
+          var isPerformance = rater.hasClass("performance");
+          Dajaxice.ratings.click_vote(my_callback, {'value':value, 'advice_id': advice_id, 'profile_id': profile_id, 'isPerformance': isPerformance, 'is_submission': true, 'user_id': user_id});
+          console.log("Voting for submission vote");
+      });
+    }
+
     $(function ()  
       { $("[rel=status]").popover({title: 'Status', content: "Status tells us how well the person is respected."});  
     });
@@ -41,12 +55,12 @@ Advice Ratings Home Page
                 <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
                 {% if not is_control%}
                   <div class="rating_left"> 
-                    <h4 class="left" rel="status" data-trigger="hover"><small>Status: </small></h4>
+                    <h4 class="left" rel="status" data-trigger="hover" data-placement="bottom"><small>Status: </small></h4>
                     <div class="rateit left custom_rating" data-rateit-value={{advice_status|get_item:advice}}  data-rateit-max={{advice_status|get_item:advice}} data-rateit-readonly="true"></div>
                   </div>
 
                   <div class="rating_right">
-                    <h4 class="left " rel="reputation" data-trigger="hover"><small>Reputation: </small></h4>
+                    <h4 class="left " rel="reputation" data-trigger="hover" data-placement="bottom"><small>Reputation: </small></h4>
                     <div class="rateit left custom_rating" data-rateit-value={{advice_rep|get_item:advice}} data-rateit-max={{advice_rep|get_item:advice}}  data-rateit-readonly="true"></div>
                   </div>
                 {% endif %}
@@ -67,9 +81,9 @@ Advice Ratings Home Page
                   <h4 class="left"><small>Rate Quality: </small></h4>
                   {% if advice.company in quality_votes %}
                   <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing{{forloop.counter}}">
-                  <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
-                  data-rateit-value={{quality_votes|get_item:advice.company}} data-rateit-readonly="true"
-                  data-rateit-resetable="false" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  <div class="rateit left custom_rating quality rated" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                  data-rateit-value={{quality_votes|get_item:advice.company}}
+                  data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                   {% else %}
                   <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
                   <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
@@ -81,8 +95,8 @@ Advice Ratings Home Page
                   <h4 class="left"><small>Rate Performance: </small></h4>
                   {% if advice.company in performance_votes %}
                   <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing{{forloop.counter}}">
-                  <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
-                   data-rateit-value={{performance_votes|get_item:advice.company}} data-rateit-readonly="true" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  <div class="rateit left custom_rating performance rated" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                   data-rateit-value={{performance_votes|get_item:advice.company}} data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                   {% else %}
                   <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
                   <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
@@ -98,16 +112,16 @@ Advice Ratings Home Page
             $(".rateit").bind('rated reset', function (event) {
               var rater = $(this);
               var value = rater.rateit('value');
+              $(this).attr('class', 'rated');
 
               //Disable Voting
-              rater.rateit('readonly', true);
+              // rater.rateit('readonly', true);
 
               var advice_id = $(rater).data('advice-id');
               var profile_id = $(rater).data('profile-id');
               var user_id = $($("#uid")[0]).data('uid');
               var isPerformance = rater.hasClass("performance");
-              
-              Dajaxice.ratings.vote(my_callback, {'value':value, 'advice_id': advice_id, 'profile_id': profile_id, 'isPerformance': isPerformance, 'user_id': user_id});
+              Dajaxice.ratings.click_vote(my_callback, {'value':value, 'advice_id': advice_id, 'profile_id': profile_id, 'isPerformance': isPerformance, 'is_submission': false, 'user_id': user_id});
             });
           </script>
 
@@ -115,11 +129,13 @@ Advice Ratings Home Page
         <p>No advice is available.</p>
       {% endif %}
       <div class="large-12 columns">
-        <center><button class="submit_button btn btn-default" data-toggle="modal" data-target="#submitModal">Submit</button></center>
+        <center><button id="#submit" class="submit_button btn btn-default" data-toggle="modal" data-target="#submitModal" onclick="submit();">Submit</button></center>
       </div>
   </div>
     {% endblock %}
 </div><!-- /.container -->
+
+
 <!-- Modal -->
 <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -138,6 +154,8 @@ Advice Ratings Home Page
     </div>
   </div>
 </div>
+
+
 <div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="loadModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
