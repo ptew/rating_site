@@ -6,6 +6,7 @@
  */
 
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
+@import "bootstrap.min.css";
 
 body {
 	font: 13px/1.231 sans-serif;
@@ -160,4 +161,18 @@ div.voted div.rateit-reset:hover
 
 .popover {
 	max-width: 200px;
+}
+
+.statistics > li {
+	font-size: 14px;
+	font-family: "Open Sans";
+}
+
+.modal-backdrop.in {
+	background-color: #161c23;
+	opacity: .99;
+}
+
+.banner_text {
+	color: white;
 }

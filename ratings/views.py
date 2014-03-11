@@ -87,6 +87,7 @@ def index(request, user_id):
 	param_dictionary['is_control'] = is_control
 	param_dictionary['quality_votes'] = quality_votes
 	param_dictionary['performance_votes'] = performance_votes
+	param_dictionary['world_number'] = world_number + 1
 
 	return render(request, 'ratings/index.html', param_dictionary)
 

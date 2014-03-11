@@ -15,11 +15,13 @@ Advice Ratings Home Page
       };
 
       $(window).load(function(){
+        var world = $($("#world")[0]).data('world');
+        console.log("World: " + world);
         $('#loadModal').modal('show');
     });
 
     function submit() {
-      $(".rateit.rated").each( function() {
+      $(".rateit.vote").each( function() {
           var rater = $(this);
           var value = rater.rateit('value');
 
@@ -50,27 +52,34 @@ Advice Ratings Home Page
           {% for advice in advice_list %}
 
             <div class="large-8 columns">
-              <h2>{{ advice.company }} <small>{{ advice.ticker }}</small></h2>
+              <h2>{{ advice.company }} <small>US: {{advice.ticker }}</small></h2>
               <div class="medium-8 columns">
-                <h4 ><small> Price Target: ${{advice.price_target}} Time Frame: {{advice.time_frame}}</small></h4>
-                {% if not is_control%}
+                <div class="rating_left">
+                  <h4 class="left"><small> Price Target: ${{advice.price_target}}</small></h4>
+                </div>
+                <div class="rating_right">
+                  <h4 class="left"><small> Time Frame: ${{advice.time_frame}}</small></h4>
+                </div>
+              </div>
+              {% if not is_control%}
+                <div class="medium-8 columns">
                   <div class="rating_left"> 
                     <h4 class="left" rel="status" data-trigger="hover" data-placement="bottom"><small>Status: </small></h4>
-                    <div class="rateit left custom_rating" data-rateit-value={{advice_status|get_item:advice}}  data-rateit-max={{advice_status|get_item:advice}} data-rateit-readonly="true"></div>
+                    <div class="rateit left custom_rating" data-rateit-value={{advice_status|get_item:advice}}  data-rateit-max="3" data-rateit-readonly="true"></div>
                   </div>
 
                   <div class="rating_right">
                     <h4 class="left " rel="reputation" data-trigger="hover" data-placement="bottom"><small>Reputation: </small></h4>
-                    <div class="rateit left custom_rating" data-rateit-value={{advice_rep|get_item:advice}} data-rateit-max={{advice_rep|get_item:advice}}  data-rateit-readonly="true"></div>
+                    <div class="rateit left custom_rating" data-rateit-value={{advice_rep|get_item:advice}} data-rateit-max=3 data-rateit-readonly="true"></div>
                   </div>
-                {% endif %}
-              </div>
+                </div>
+              {% endif %}
               <div class="medium-8 columns">
                 <p class="advice_content">{{advice.content}}</p>
               </div>
               <div class="company_stats medium-3 columns"><h5>Statistics: <h5>
                 <ul class="statistics">
-                  <li>Stat 1</li>
+                  <li>Common Equity</li>
                   <li>Stat 2</li>
                   <li>Stat 3</li>
                 </ul>
@@ -81,12 +90,12 @@ Advice Ratings Home Page
                   <h4 class="left"><small>Rate Quality: </small></h4>
                   {% if advice.company in quality_votes %}
                   <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing{{forloop.counter}}">
-                  <div class="rateit left custom_rating quality rated" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                  <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
                   data-rateit-value={{quality_votes|get_item:advice.company}}
-                  data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}} data-rateit-resetable="false"></div>
                   {% else %}
                   <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
-                  <div class="rateit left custom_rating quality" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                  <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
                   data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                   {% endif %}
                 </div>
@@ -95,11 +104,11 @@ Advice Ratings Home Page
                   <h4 class="left"><small>Rate Performance: </small></h4>
                   {% if advice.company in performance_votes %}
                   <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing{{forloop.counter}}">
-                  <div class="rateit left custom_rating performance rated" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
-                   data-rateit-value={{performance_votes|get_item:advice.company}} data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                   data-rateit-value={{performance_votes|get_item:advice.company}} data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}} data-rateit-resetable="false"></div>
                   {% else %}
                   <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
-                  <div class="rateit left custom_rating performance" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                  <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
                   data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                   {% endif %}
                 </div>
@@ -112,7 +121,7 @@ Advice Ratings Home Page
             $(".rateit").bind('rated reset', function (event) {
               var rater = $(this);
               var value = rater.rateit('value');
-              $(this).attr('class', 'rated');
+              // $(this).attr('class', 'clicked');
 
               //Disable Voting
               // rater.rateit('readonly', true);
@@ -173,4 +182,5 @@ Advice Ratings Home Page
   </div>
 </div>
 <div id="uid" data-uid={{user.user_id}}></div>
+<div id="world" data-world={{world_number}}></div>
 {% endblock %}
