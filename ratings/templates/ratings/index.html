@@ -51,7 +51,7 @@ Advice Ratings Home Page
       {% if advice_list %}
           {% for advice in advice_list %}
 
-            <div class="large-8 columns">
+            <div class="large-10 columns">
               <h2>{{ advice.company }} <small>US: {{advice.ticker }}</small></h2>
               <div class="medium-8 columns">
                 <div class="rating_left">
@@ -77,7 +77,8 @@ Advice Ratings Home Page
               <div class="medium-8 columns">
                 <p class="advice_content">{{advice.content}}</p>
               </div>
-              <div class="company_stats medium-3 columns"><h5>Statistics: <h5>
+              <div class="company_stats medium-3 columns">
+                <h5>Statistics: </h5>
                 <ul class="statistics">
                   <li>Common Equity</li>
                   <li>Stat 2</li>
@@ -85,7 +86,7 @@ Advice Ratings Home Page
                 </ul>
               </div>
               
-              <div class="large-8 columns">
+              <div class="medium-8 columns">
                 <div class="rating_left">
                   <h4 class="left"><small>Rate Quality: </small></h4>
                   {% if advice.company in quality_votes %}
