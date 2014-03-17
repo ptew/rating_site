@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = ')2_-q&5zkg@b2#_!qaw4@$cu2ohx2=3t%&b3$9q!)pbc5ki%)$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['162.209.127.204']
 
 
 # Application definition
@@ -58,10 +58,29 @@ WSGI_APPLICATION = 'tbsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE':'django.db.backends.mysql',
+#        'NAME': 'tbsite',
+#        'USER': 'user',
+#        'PASSWORD': 'mitSloan$1',
+#  	'HOST' : 'localhost',
+#  }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': '/etc/mysql/my.cnf',
+        },
     }
 }
 
