@@ -17,8 +17,6 @@ def index(request, user_id):
 	advice_status = {}
 	profile_dict = {}
 	advice_list = []
-	is_control = False
-
 
 	user = User.objects.filter(user_id=int(user_id))
 	if user:
@@ -61,8 +59,6 @@ def index(request, user_id):
 		advice = world.advice
 		advice_list.append(advice)
 		prof = world.profile
-		if prof.profile_number==0 :
-			is_control = True
 
 		advice_rep[advice] = prof.rep
 		advice_status[advice] = prof.status
@@ -84,7 +80,7 @@ def index(request, user_id):
 	param_dictionary['advice_status'] = advice_status
 	param_dictionary['profile_dict'] = profile_dict
 	param_dictionary['user'] = user
-	param_dictionary['is_control'] = is_control
+	param_dictionary['is_control'] = world_number > 1 ? True : None
 	param_dictionary['quality_votes'] = quality_votes
 	param_dictionary['performance_votes'] = performance_votes
 	param_dictionary['world_number'] = world_number + 1

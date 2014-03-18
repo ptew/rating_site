@@ -4,7 +4,7 @@ from ratings.models import Profile, Advice, World
 
 class AdviceAdmin(admin.ModelAdmin):
 	fieldsets = [
-		('Advice Content', {'fields': ['company', 'ticker' , 'price_target', 'time_frame', 'content']}),
+		('Advice Content', {'fields': ['company', 'ticker' , 'price_target', 'time_scale', 'content']}),
 	]
 	list_display = ('company', 'id')
 	search_fields = ['company', 'id']

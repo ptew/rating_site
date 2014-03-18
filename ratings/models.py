@@ -15,7 +15,7 @@ class Advice(models.Model):
 	ticker = models.CharField(max_length=20)
 	content = models.TextField()
 	price_target = models.FloatField(default=0)
-	time_frame = models.IntegerField(default=0)
+	time_scale = models.CharField(max_length=20, default="6 months")
 
 	def __unicode__(self):
 		return self.company

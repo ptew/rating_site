@@ -4,7 +4,7 @@
 {% load ratings_filters %}
 
 {% block title %}
-Advice Ratings Home Page
+Invest Competition
 {% endblock %}
 
 {% block head %}
@@ -52,16 +52,16 @@ Advice Ratings Home Page
           {% for advice in advice_list %}
 
             <div class="large-10 columns">
-              <h2>{{ advice.company }} <small>US: {{advice.ticker }}</small></h2>
+              <h2>{{ advice.company }} (US: {{advice.ticker}} )</h2>
               <div class="medium-8 columns">
                 <div class="rating_left">
                   <h4 class="left"><small> Price Target: ${{advice.price_target}}</small></h4>
                 </div>
                 <div class="rating_right">
-                  <h4 class="left"><small> Time Frame: ${{advice.time_frame}}</small></h4>
+                  <h4 class="left"><small> Time Frame: {{advice.time_scale}}</small></h4>
                 </div>
               </div>
-              {% if not is_control%}
+              {% if world_number > 1 %}
                 <div class="medium-8 columns">
                   <div class="rating_left"> 
                     <h4 class="left" rel="status" data-trigger="hover" data-placement="bottom"><small>Status: </small></h4>
@@ -95,9 +95,9 @@ Advice Ratings Home Page
                   data-rateit-value={{quality_votes|get_item:advice.company}}
                   data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}} data-rateit-resetable="false"></div>
                   {% else %}
-                  <input type="range" max="5" step="1" id="quality-backing{{forloop.counter}}">
+                  <input type="range" max="5" value="0" step="1" id="quality-backing{{forloop.counter}}">
                   <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
-                  data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  data-rateit-resetable="false" data-rateit-ispreset="true"  data-rateit-min="0" data-rateit-max="5" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                   {% endif %}
                 </div>
 
@@ -108,9 +108,9 @@ Advice Ratings Home Page
                   <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
                    data-rateit-value={{performance_votes|get_item:advice.company}} data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}} data-rateit-resetable="false"></div>
                   {% else %}
-                  <input type="range" max="5" step="1" id="performance-backing{{forloop.counter}}">
+                  <input type="range" max="5" value="0" step="1" id="performance-backing{{forloop.counter}}">
                   <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
-                  data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
+                  data-rateit-resetable="false"  data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                   {% endif %}
                 </div>
               </div>
