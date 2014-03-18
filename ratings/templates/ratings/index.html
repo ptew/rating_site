@@ -63,15 +63,9 @@ Invest Competition
               </div>
               {% if world_number > 1 %}
                 <div class="medium-8 columns">
-                  <div class="rating_left"> 
-                    <h4 class="left" rel="status" data-trigger="hover" data-placement="bottom"><small>Status: </small></h4>
-                    <div class="rateit left custom_rating" data-rateit-value={{advice_status|get_item:advice}}  data-rateit-max="3" data-rateit-readonly="true"></div>
-                  </div>
+                    <h4 class="left" rel="status" data-trigger="hover" data-placement="bottom"><small>This individuals last ideas have {{advice_status|get_item:advice}} the market.</small></h4>
 
-                  <div class="rating_right">
-                    <h4 class="left " rel="reputation" data-trigger="hover" data-placement="bottom"><small>Reputation: </small></h4>
-                    <div class="rateit left custom_rating" data-rateit-value={{advice_rep|get_item:advice}} data-rateit-max=3 data-rateit-readonly="true"></div>
-                  </div>
+                    <h4 class="left " rel="reputation" data-trigger="hover" data-placement="bottom"><small>This individuals firm was recently ranked {{advice_rep|get_item:advice}} in a survey by its peers.</small></h4>
                 </div>
               {% endif %}
               <div class="medium-8 columns">
