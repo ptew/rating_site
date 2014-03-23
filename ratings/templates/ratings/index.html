@@ -44,43 +44,46 @@ Invest Competition
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="wide container">
 
-  <div class="advice_list large-12 columns">
+  <div class="advice_list large-12">
     {% block content %}
       {% if advice_list %}
           {% for advice in advice_list %}
 
-            <div class="large-10 columns">
-              <h2>{{ advice.company }} (US: {{advice.ticker}} )</h2>
-              <div class="medium-8 columns">
+            <div class="large-12 columns">
+              <h2>{{ advice.company }} (US: {{advice.ticker}})</h2>
+              <div class="medium-7 columns left">
                 <div class="rating_left">
-                  <h4 class="left"><small> Price Target: ${{advice.price_target}}</small></h4>
+                  <h5 class="left"> Price Target: ${{advice.price_target}}</h5>
                 </div>
                 <div class="rating_right">
-                  <h4 class="left"><small> Time Frame: {{advice.time_scale}}</small></h4>
+                  <h5 class="left">Time Frame: {{advice.time_scale}}</h5>
                 </div>
               </div>
               {% if world_number > 1 %}
-                <div class="medium-8 columns">
-                    <h4 class="left" rel="status" data-trigger="hover" data-placement="bottom"><small>This individuals last ideas have {{advice_status|get_item:advice}} the market.</small></h4>
+                <div class="left medium-7 columns">
+                    <h6 class="left" rel="status" data-trigger="hover" data-placement="bottom"><b>This individual's last ideas have {{advice_status|get_status:advice}} the market.</b></h6>
 
-                    <h4 class="left " rel="reputation" data-trigger="hover" data-placement="bottom"><small>This individuals firm was recently ranked {{advice_rep|get_item:advice}} in a survey by its peers.</small></h4>
+                    <h6 class="left " rel="reputation" data-trigger="hover" data-placement="bottom"><b>This individual's firm was recently ranked {{advice_rep|get_rep:advice}} in a survey by its peers.</b></h6>
                 </div>
               {% endif %}
-              <div class="medium-8 columns">
+              <div class="medium-7 columns">
                 <p class="advice_content">{{advice.content}}</p>
               </div>
               <div class="company_stats medium-3 columns">
                 <h5>Statistics: </h5>
                 <ul class="statistics">
-                  <li>Common Equity</li>
-                  <li>Stat 2</li>
-                  <li>Stat 3</li>
+                  <li>Asset Class: Common Equity</li>
+                  <li>Price at Recommendation: $XX.YY</li>
+                  <li>Recommendation: Long</li>
+                  <li>Market Cap.: Small Cap</li>
+                  <li>Country: United States</li>
+                  <li>Situation: Value</li>
                 </ul>
               </div>
               
-              <div class="medium-8 columns">
+              <div class="medium-7 columns">
                 <div class="rating_left">
                   <h4 class="left"><small>Rate Quality: </small></h4>
                   {% if advice.company in quality_votes %}
@@ -108,7 +111,9 @@ Invest Competition
                   {% endif %}
                 </div>
               </div>
-              <hr>
+              <div class="medium-7 columns left">
+                <hr>
+              </div>
             </div>
           {% endfor %}
           
@@ -132,7 +137,7 @@ Invest Competition
       {% else %}
         <p>No advice is available.</p>
       {% endif %}
-      <div class="large-12 columns">
+      <div class="medium-7 columns">
         <center><button id="#submit" class="submit_button btn btn-default" data-toggle="modal" data-target="#submitModal" onclick="submit();">Submit</button></center>
       </div>
   </div>
@@ -149,7 +154,72 @@ Invest Competition
         <h4 class="modal-title" id="myModalLabel">Survey</h4>
       </div>
         <div class="modal-body">
-          This will be populated with the survey when I know what it entails.
+
+            <!-- Multiple Radios -->
+            <div class="control-group">
+              <label class="control-label" for="radios"><h4>Question 1</h4></label>
+              <div class="controls">
+                <label class="radio" for="radios-0">
+                  <input type="radio" name="radios" id="radios-0" value="Option one" checked="checked">
+                  Option one
+                </label>
+                <label class="radio" for="radios-1">
+                  <input type="radio" name="radios" id="radios-1" value="Option two">
+                  Option two
+                </label>
+                <label class="radio" for="radios-2">
+                  <input type="radio" name="radios" id="radios-2" value="Option three">
+                  Option three
+                </label>
+                <label class="radio" for="radios-3">
+                  <input type="radio" name="radios" id="radios-3" value="Option four">
+                  Option four
+                </label>
+              </div>
+            </div>
+
+            <!-- Textarea -->
+            <div class="control-group">
+              <label class="control-label" for="textarea"><h4>Question 2</h4></label>
+              <div class="controls">                     
+                <textarea id="textarea" name="textarea">default text</textarea>
+              </div>
+            </div>
+
+            <!-- Multiple Checkboxes (inline) -->
+            <div class="control-group">
+              <label class="control-label" for="checkboxes"><h4>Question 3</h4></label>
+              <div class="controls">
+                <label class="checkbox inline" for="checkboxes-0">
+                  <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
+                  1
+                </label>
+                <label class="checkbox inline" for="checkboxes-1">
+                  <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
+                  2
+                </label>
+                <label class="checkbox inline" for="checkboxes-2">
+                  <input type="checkbox" name="checkboxes" id="checkboxes-2" value="3">
+                  3
+                </label>
+                <label class="checkbox inline" for="checkboxes-3">
+                  <input type="checkbox" name="checkboxes" id="checkboxes-3" value="4">
+                  4
+                </label>
+                <label class="checkbox inline" for="checkboxes-4">
+                  <input type="checkbox" name="checkboxes" id="checkboxes-4" value="5">
+                  5
+                </label>
+              </div>
+            </div>
+
+            <!-- Textarea -->
+            <div class="control-group">
+              <label class="control-label" for="textarea"><h4>Question 4</h4></label>
+              <div class="controls">                     
+                <textarea id="textarea" name="textarea">default text</textarea>
+              </div>
+            </div>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -165,10 +235,10 @@ Invest Competition
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Welcome!</h4>
+        <h4 class="modal-title" id="myModalLabel">Investment Idea Competition</h4>
       </div>
         <div class="modal-body">
-          Here is some info. Please vote!
+          You will be presented with four diverse investment ideas to rate on quality and expected performance. Since this is got a competition, all information that can identify the user has been removed. Instead, we will give you some information about the user.
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>

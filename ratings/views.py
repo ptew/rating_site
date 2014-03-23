@@ -80,7 +80,7 @@ def index(request, user_id):
 	param_dictionary['advice_status'] = advice_status
 	param_dictionary['profile_dict'] = profile_dict
 	param_dictionary['user'] = user
-	param_dictionary['is_control'] = world_number > 1 ? True : None
+	param_dictionary['is_control'] = True if world_number > 1 else None
 	param_dictionary['quality_votes'] = quality_votes
 	param_dictionary['performance_votes'] = performance_votes
 	param_dictionary['world_number'] = world_number + 1

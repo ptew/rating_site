@@ -4,8 +4,8 @@ import datetime
 
 class Profile(models.Model):
 	profile_number = models.IntegerField(default=0)
-	rep = models.IntegerField(default=0)
-	status = models.IntegerField(default=0)
+	status = models.CharField(max_length=20)
+	rep = models.CharField(max_length=20)
 
 	def __unicode__(self):
 		return str(self.profile_number)
