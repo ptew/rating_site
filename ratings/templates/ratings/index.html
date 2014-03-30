@@ -12,6 +12,7 @@ Invest Competition
 
   <script type="text/javascript">
       function my_callback(data){
+        console.log("callback");
       };
 
       $(window).load(function(){
@@ -27,9 +28,10 @@ Invest Competition
 
           var advice_id = $(rater).data('advice-id');
           var profile_id = $(rater).data('profile-id');
-          var user_id = $($("#uid")[0]).data('uid');
+          var id_number = $($("#uid")[0]).data('uid');
+	  console.log(id_number);
           var isPerformance = rater.hasClass("performance");
-          Dajaxice.ratings.click_vote(my_callback, {'value':value, 'advice_id': advice_id, 'profile_id': profile_id, 'isPerformance': isPerformance, 'is_submission': true, 'user_id': user_id});
+          Dajaxice.ratings.click_vote(my_callback);
           console.log("Voting for submission vote");
       });
     }
@@ -121,16 +123,13 @@ Invest Competition
             $(".rateit").bind('rated reset', function (event) {
               var rater = $(this);
               var value = rater.rateit('value');
-              // $(this).attr('class', 'clicked');
-
-              //Disable Voting
-              // rater.rateit('readonly', true);
 
               var advice_id = $(rater).data('advice-id');
               var profile_id = $(rater).data('profile-id');
-              var user_id = $($("#uid")[0]).data('uid');
+              var id_number = $($("#uid")[0]).data('uid');
+              console.log(id_number);
               var isPerformance = rater.hasClass("performance");
-              Dajaxice.ratings.click_vote(my_callback, {'value':value, 'advice_id': advice_id, 'profile_id': profile_id, 'isPerformance': isPerformance, 'is_submission': false, 'user_id': user_id});
+              Dajaxice.ratings.click_vote(my_callback);
             });
           </script>
 
@@ -246,6 +245,6 @@ Invest Competition
     </div>
   </div>
 </div>
-<div id="uid" data-uid={{user.user_id}}></div>
+<div id="uid" data-uid={{user.id_number}}></div>
 <div id="world" data-world={{world_number}}></div>
 {% endblock %}

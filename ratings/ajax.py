@@ -9,11 +9,12 @@ from django.template import RequestContext, loader
 import logging
 
 @dajaxice_register
-def click_vote(request, advice_id, profile_id, isPerformance, value, is_submission, user_id):
-	user = get_object_or_404(User, user_id=user_id)
-	prof = get_object_or_404(Profile, profile_number = profile_id)
-	advice = get_object_or_404(Advice, pk = advice_id)
-	time = timezone.now()
-	user_vote = Vote(user=user, profile=prof, timestamp=time, value=value, advice=advice, is_performance=bool(isPerformance), is_submission=bool(is_submission))
-	user_vote.save()
+def click_vote(request, advice_id, profile_id, isPerformance, value, is_submission):
+	
+	# user = get_object_or_404(User, id_number=user_id)
+	# prof = get_object_or_404(Profile, profile_number = profile_id)
+	# advice = get_object_or_404(Advice, pk = advice_id)
+	# time = timezone.now()
+	# user_vote = Vote(user=user, profile=prof, timestamp=time, value=value, advice=advice, is_performance=bool(isPerformance), is_submission=bool(is_submission))
+	# user_vote.save()
 	return simplejson.dumps({'message':'was %s' % value})

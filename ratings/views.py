@@ -8,7 +8,7 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.core import dajaxice_functions
 import logging
 
-def index(request, user_id):
+def index(request, id_number):
 	param_dictionary = {}
 
 	# add callback check to verify they are a registered user
@@ -18,7 +18,7 @@ def index(request, user_id):
 	profile_dict = {}
 	advice_list = []
 
-	user = User.objects.filter(user_id=int(user_id))
+	user = User.objects.filter(id_number=int(id_number))
 	if user:
 		user= user[0]
 		world_number = get_object_or_404(UserConnection, user = user).world_number
@@ -34,7 +34,7 @@ def index(request, user_id):
 		# 	profile_dict[advice] = prof
 		# 	advice_dict[advice.pk] = advice
 	else:
-		user = User(user_id=user_id, participation_timestamp = timezone.now())
+		user = User(id_number=id_number, participation_timestamp = timezone.now())
 		user.save()
 
 		world_number = randrange(0,5)
@@ -87,21 +87,13 @@ def index(request, user_id):
 
 	return render(request, 'ratings/index.html', param_dictionary)
 
-def detail(request, advice_id):
-	advice = get_object_or_404(Advice, pk=advice_id)
-	return render(request, 'ratings/detail.html', {'advice':advice})
-
 @dajaxice_register
-def submit_vote(request, advice_id, profile_id, isPerformance, value, user_id):
-	user = get_object_or_404(User, user_id=user_id)
-	prof = get_object_or_404(Profile, profile_number = profile_id)
-	advice = get_object_or_404(Advice, pk = advice_id)
-	time = timezone.now()
-	user_vote;
-	if bool(isPerformance):
-		user_vote = PerformanceClickVote(user=user, profile=prof, timestamp=time, value=value, advice=advice)
-		user_vote.save()
-	else:
-		user_vote = QualityClickVote(user=user, profile=prof, timestamp=time, value=value, advice=advice)
-		user_vote.save()
-	return simplejson.dumps({'message':'was %s' % value})
+def click_vote(request):
+	
+	# user = get_object_or_404(User, id_number=user_id)
+	# prof = get_object_or_404(Profile, profile_number = profile_id)
+	# advice = get_object_or_404(Advice, pk = advice_id)
+	# time = timezone.now()
+	# user_vote = Vote(user=user, profile=prof, timestamp=time, value=value, advice=advice, is_performance=bool(isPerformance), is_submission=bool(is_submission))
+	# user_vote.save()
+	return simplejson.dumps({'message':'was'})

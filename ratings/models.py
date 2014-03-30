@@ -21,7 +21,7 @@ class Advice(models.Model):
 		return self.company
 
 class User(models.Model):
-	user_id = models.IntegerField(default=0)
+	id_number = models.IntegerField(default=0)
 	participation_timestamp = models.DateTimeField('date published')
 
 class Vote(models.Model):
