@@ -21,31 +21,17 @@ class Advice(models.Model):
 		return self.company
 
 class User(models.Model):
-	id_number = models.IntegerField(default=0)
+	user_id = models.IntegerField(default=0)
 	participation_timestamp = models.DateTimeField('date published')
 
 class Vote(models.Model):
 	profile = models.ForeignKey(Profile)
 	advice = models.ForeignKey(Advice)
-	user = models.ForeignKey(User)
+	user_id = models.IntegerField(default=0)
 	value = models.IntegerField(default=0)
 	timestamp = models.DateTimeField('date published')
 	is_performance = models.BooleanField()
 	is_submission = models.BooleanField()
-
-class QualityVote(models.Model):
-	profile = models.ForeignKey(Profile)
-	advice = models.ForeignKey(Advice)
-	user = models.ForeignKey(User)
-	value = models.IntegerField(default=0)
-	timestamp = models.DateTimeField('date published')
-
-class PerformanceVote(models.Model):
-	profile = models.ForeignKey(Profile)
-	advice = models.ForeignKey(Advice)
-	user = models.ForeignKey(User)
-	value = models.IntegerField(default=0)
-	timestamp = models.DateTimeField('date published')
 
 class UserConnection(models.Model):
 	user = models.ForeignKey(User)

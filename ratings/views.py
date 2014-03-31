@@ -3,12 +3,12 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.utils import timezone
-from ratings.models import Advice, Profile, UserConnection, User, PerformanceVote, QualityVote, World, Vote
+from ratings.models import Advice, Profile, UserConnection, User, World, Vote
 from dajaxice.decorators import dajaxice_register
 from dajaxice.core import dajaxice_functions
 import logging
 
-def index(request, id_number):
+def index(request, user_id):
 	param_dictionary = {}
 
 	# add callback check to verify they are a registered user
@@ -18,7 +18,7 @@ def index(request, id_number):
 	profile_dict = {}
 	advice_list = []
 
-	user = User.objects.filter(id_number=int(id_number))
+	user = User.objects.filter(user_id=int(user_id))
 	if user:
 		user= user[0]
 		world_number = get_object_or_404(UserConnection, user = user).world_number
@@ -34,7 +34,7 @@ def index(request, id_number):
 		# 	profile_dict[advice] = prof
 		# 	advice_dict[advice.pk] = advice
 	else:
-		user = User(id_number=id_number, participation_timestamp = timezone.now())
+		user = User(user_id=user_id, participation_timestamp = timezone.now())
 		user.save()
 
 		world_number = randrange(0,5)
@@ -66,11 +66,11 @@ def index(request, id_number):
 		advice_dict[advice.pk] = advice
 
 	quality_votes = {}
-	for quality_vote in Vote.objects.filter(user = user, is_performance=False):
+	for quality_vote in Vote.objects.filter(user_id = user_id, is_performance=False):
 		quality_votes[quality_vote.advice.company] = quality_vote.value
 
 	performance_votes = {}
-	for performance_vote in Vote.objects.filter(user = user, is_performance=True):
+	for performance_vote in Vote.objects.filter(user_id = user_id, is_performance=True):
 		performance_votes[performance_vote.advice.company] = performance_vote.value
 
 	param_dictionary['advice_list'] = advice_list
@@ -87,13 +87,7 @@ def index(request, id_number):
 
 	return render(request, 'ratings/index.html', param_dictionary)
 
-@dajaxice_register
-def click_vote(request):
-	
-	# user = get_object_or_404(User, id_number=user_id)
-	# prof = get_object_or_404(Profile, profile_number = profile_id)
-	# advice = get_object_or_404(Advice, pk = advice_id)
-	# time = timezone.now()
-	# user_vote = Vote(user=user, profile=prof, timestamp=time, value=value, advice=advice, is_performance=bool(isPerformance), is_submission=bool(is_submission))
-	# user_vote.save()
-	return simplejson.dumps({'message':'was'})
+def detail(request, advice_id):
+	advice = get_object_or_404(Advice, pk=advice_id)
+	return render(request, 'ratings/detail.html', {'advice':advice})
+

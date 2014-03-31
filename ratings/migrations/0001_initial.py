@@ -11,34 +11,82 @@ class Migration(SchemaMigration):
         # Adding model 'Profile'
         db.create_table(u'ratings_profile', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('education', self.gf('django.db.models.fields.CharField')(max_length=25)),
-            ('work', self.gf('django.db.models.fields.CharField')(max_length=25)),
-            ('vote_count', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('performance', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('profile_number', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('status', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('rep', self.gf('django.db.models.fields.CharField')(max_length=20)),
         ))
         db.send_create_signal(u'ratings', ['Profile'])
 
         # Adding model 'Advice'
         db.create_table(u'ratings_advice', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('advice_text', self.gf('django.db.models.fields.CharField')(max_length=1000)),
-            ('vote_count', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('pub_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('company', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('ticker', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('content', self.gf('django.db.models.fields.TextField')()),
+            ('price_target', self.gf('django.db.models.fields.FloatField')(default=0)),
+            ('time_scale', self.gf('django.db.models.fields.CharField')(default='6 months', max_length=20)),
         ))
         db.send_create_signal(u'ratings', ['Advice'])
 
-        # Adding model 'Connection'
-        db.create_table(u'ratings_connection', (
+        # Adding model 'User'
+        db.create_table(u'ratings_user', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user_id', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('participation_timestamp', self.gf('django.db.models.fields.DateTimeField')()),
+        ))
+        db.send_create_signal(u'ratings', ['User'])
+
+        # Adding model 'Vote'
+        db.create_table(u'ratings_vote', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('profile', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Profile'])),
             ('advice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Advice'])),
-            ('vote_count', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('rating_sum', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('user', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('value', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
+            ('is_performance', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('is_submission', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal(u'ratings', ['Connection'])
+        db.send_create_signal(u'ratings', ['Vote'])
+
+        # Adding model 'QualityVote'
+        db.create_table(u'ratings_qualityvote', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('profile', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Profile'])),
+            ('advice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Advice'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.User'])),
+            ('value', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
+        ))
+        db.send_create_signal(u'ratings', ['QualityVote'])
+
+        # Adding model 'PerformanceVote'
+        db.create_table(u'ratings_performancevote', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('profile', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Profile'])),
+            ('advice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Advice'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.User'])),
+            ('value', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
+        ))
+        db.send_create_signal(u'ratings', ['PerformanceVote'])
+
+        # Adding model 'UserConnection'
+        db.create_table(u'ratings_userconnection', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.User'])),
+            ('world_number', self.gf('django.db.models.fields.IntegerField')(default=0)),
+        ))
+        db.send_create_signal(u'ratings', ['UserConnection'])
+
+        # Adding model 'World'
+        db.create_table(u'ratings_world', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('world_number', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('advice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Advice'])),
+            ('profile', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Profile'])),
+        ))
+        db.send_create_signal(u'ratings', ['World'])
 
 
     def backwards(self, orm):
@@ -48,37 +96,89 @@ class Migration(SchemaMigration):
         # Deleting model 'Advice'
         db.delete_table(u'ratings_advice')
 
-        # Deleting model 'Connection'
-        db.delete_table(u'ratings_connection')
+        # Deleting model 'User'
+        db.delete_table(u'ratings_user')
+
+        # Deleting model 'Vote'
+        db.delete_table(u'ratings_vote')
+
+        # Deleting model 'QualityVote'
+        db.delete_table(u'ratings_qualityvote')
+
+        # Deleting model 'PerformanceVote'
+        db.delete_table(u'ratings_performancevote')
+
+        # Deleting model 'UserConnection'
+        db.delete_table(u'ratings_userconnection')
+
+        # Deleting model 'World'
+        db.delete_table(u'ratings_world')
 
 
     models = {
         u'ratings.advice': {
             'Meta': {'object_name': 'Advice'},
-            'advice_text': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
-            'authors': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['ratings.Profile']", 'through': u"orm['ratings.Connection']", 'symmetrical': 'False'}),
+            'company': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'content': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'pub_date': ('django.db.models.fields.DateTimeField', [], {}),
-            'vote_count': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+            'price_target': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'ticker': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'time_scale': ('django.db.models.fields.CharField', [], {'default': "'6 months'", 'max_length': '20'})
         },
-        u'ratings.connection': {
-            'Meta': {'object_name': 'Connection'},
+        u'ratings.performancevote': {
+            'Meta': {'object_name': 'PerformanceVote'},
             'advice': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Advice']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'profile': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Profile']"}),
-            'rating_sum': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'vote_count': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.User']"}),
+            'value': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
         u'ratings.profile': {
             'Meta': {'object_name': 'Profile'},
-            'education': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'performance': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'vote_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'work': ('django.db.models.fields.CharField', [], {'max_length': '25'})
+            'profile_number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'rep': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'status': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+        },
+        u'ratings.qualityvote': {
+            'Meta': {'object_name': 'QualityVote'},
+            'advice': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Advice']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'profile': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Profile']"}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.User']"}),
+            'value': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        u'ratings.user': {
+            'Meta': {'object_name': 'User'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'participation_timestamp': ('django.db.models.fields.DateTimeField', [], {}),
+            'user_id': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        u'ratings.userconnection': {
+            'Meta': {'object_name': 'UserConnection'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.User']"}),
+            'world_number': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        u'ratings.vote': {
+            'Meta': {'object_name': 'Vote'},
+            'advice': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Advice']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_performance': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_submission': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'profile': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Profile']"}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {}),
+            'user': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'value': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        u'ratings.world': {
+            'Meta': {'object_name': 'World'},
+            'advice': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Advice']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'profile': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Profile']"}),
+            'world_number': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         }
     }
 
