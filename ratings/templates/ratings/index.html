@@ -11,17 +11,40 @@ Invest Competition
   {% dajaxice_js_import %}
 
   <script type="text/javascript">
+      $("#myButton").onclick = function () {
+        location.href = "www.yoursite.com";
+      };
+      window.onbeforeunload = function() { return "Your data WILL NOT be saved."; };
+      
       $(document).ready(function(){
         $('.carousel').carousel('pause');
       });
 
-      function next_carousel() {
-        $('#carousel-id').carousel('next');
-          console.log('mother');
-        }
-
       function my_callback(data){
         console.log("Vote Registered! with " + data.message);
+      };
+
+      function saved(data){
+        console.log(data.message);
+      }
+
+      function next_carousel(sequence_number) {
+        var quality = $('#quality-backing-' + sequence_number).val();
+        var performance = $('#performance-backing-' + sequence_number).val();
+        console.log(quality);
+        console.log(performance);
+
+        // if (quality == "0" || performance == "0") {
+        //   alert("Please vote for both performance and quality.");
+        // } else {
+        if (quality != 0 && performance != 0) {
+          $('#carousel-id').carousel('next');
+          $('html, body').animate({ scrollTop: 0 }, 'fast');
+          var user_id = $($("#uid")[0]).data('uid');
+
+          Dajaxice.ratings.save_next(saved,{'sequence_number': sequence_number, 'id_number': user_id});
+        }
+        // }
       };
 
       $(window).load(function(){
@@ -49,6 +72,12 @@ Invest Competition
     });
     $(function ()  
       { $("[rel=reputation]").popover({title: 'Reputation', content: "Reputation tells us how well the person is respected."});  
+    });
+    $(function ()  
+      { $("[rel=quality]").popover({title: 'Rate Quality', content: "This measures the extent to which you agree that this idea is high quality. One star represents low quality and five stars represents high quality."});  
+    });  
+    $(function ()  
+      { $("[rel=performance]").popover({title: 'Rate Expected Performance', content: "This measures the extent to which you agree that this stock will move in the direction expected by this individual."});  
     });  
   </script>
 {% endblock %}
@@ -68,25 +97,25 @@ Invest Competition
                   <div class="item large-12 columns">
                 {% endif %}
                   <h2>{{ advice.company }} (US: {{advice.ticker}})</h2>
-                  <div class="medium-7 columns left">
+                  <div class="advice-width columns left">
                     <div class="rating_left">
                       <h5 class="left"> Price Target: ${{advice.price_target}}</h5>
                     </div>
                     <div class="rating_right">
-                      <h5 class="left">Time Frame: {{advice.time_scale}}</h5>
+                      <h5 class="left">Estimated Investment Horizon: {{advice.time_scale}}</h5>
                     </div>
                   </div>
                   {% if world_number > 1 %}
-                    <div class="left medium-7 columns">
+                    <div class="left advice-width columns">
                         <h6 class="left" rel="status" data-trigger="hover" data-placement="bottom"><b>This individual's last ideas have {{advice_status|get_status:advice}} the market.</b></h6>
 
                         <h6 class="left " rel="reputation" data-trigger="hover" data-placement="bottom"><b>This individual's firm was recently ranked {{advice_rep|get_rep:advice}} in a survey by its peers.</b></h6>
                     </div>
                   {% endif %}
-                  <div class="medium-7 columns">
+                  <div class="advice-width columns">
                     <p class="advice_content">{{advice.content}}</p>
                   </div>
-                  <div class="company_stats medium-3 columns">
+                  <div class="company_stats columns">
                     <h5>Statistics: </h5>
                     <ul class="statistics">
                       <li>Asset Class: Common Equity</li>
@@ -98,42 +127,42 @@ Invest Competition
                     </ul>
                   </div>
                   
-                  <div class="medium-7 columns">
+                  <div class="advice-width columns">
                     <div class="rating_left">
-                      <h4 class="left"><small>Rate Quality: </small></h4>
+                      <h4 class="left" rel="quality" data-trigger="hover" data-placement="top" data-container="body"><small>Rate Quality: </small></h4>
                       {% if advice.company in quality_votes %}
-                      <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing{{forloop.counter}}">
-                      <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                      <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing-{{forloop.counter}}">
+                      <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing-{{forloop.counter}}" 
                       data-rateit-value={{quality_votes|get_item:advice.company}}
                       data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}} data-rateit-resetable="false"></div>
                       {% else %}
-                      <input type="range" max="5" value="0" step="1" id="quality-backing{{forloop.counter}}">
-                      <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing{{forloop.counter}}" 
+                      <input type="range" max="5" value="0" step="1" id="quality-backing-{{forloop.counter}}">
+                      <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing-{{forloop.counter}}" 
                       data-rateit-resetable="false" data-rateit-ispreset="true"  data-rateit-min="0" data-rateit-max="5" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                       {% endif %}
                     </div>
 
                     <div class="rating_right">
-                      <h4 class="left"><small>Rate Performance: </small></h4>
+                      <h4 class="left" rel="performance" data-trigger="hover" data-placement="top"><small>Rate Expected Performance: </small></h4>
                       {% if advice.company in performance_votes %}
-                      <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing{{forloop.counter}}">
-                      <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                      <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing-{{forloop.counter}}">
+                      <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing-{{forloop.counter}}" 
                        data-rateit-value={{performance_votes|get_item:advice.company}} data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}} data-rateit-resetable="false"></div>
                       {% else %}
-                      <input type="range" max="5" value="0" step="1" id="performance-backing{{forloop.counter}}">
-                      <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing{{forloop.counter}}" 
+                      <input type="range" max="5" value="0" step="1" id="performance-backing-{{forloop.counter}}">
+                      <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing-{{forloop.counter}}" 
                       data-rateit-resetable="false"  data-rateit-min="0" data-rateit-max="10" data-advice-id={{advice.id}} data-profile-id={{profile_dict|get_item:advice}}></div>
                       {% endif %}
                     </div>
                   </div>
-                  <div class="medium-7 columns left">
+                  <div class="advice-width columns left">
                     <hr>
                   </div>
-                  <div class="medium-7 columns left">
+                  <div class="advice-width columns left">
                     {% if forloop.last %}
                       <center><button id="submit" class="submit_button btn btn-default" data-toggle="modal" data-target="#submitModal" onclick="submit();">Submit</button></center>
                     {% else %}
-                      <center><button id="next_button" class="submit_button btn btn-default" onclick="next_carousel();">Next</button></center>
+                      <center><button id="next_button" class="submit_button btn btn-default" onclick="next_carousel({{forloop.counter}});">Next</button></center>
                     {% endif %}
                   </div>
                 </div>
@@ -157,7 +186,6 @@ Invest Competition
                   var advice_id = $(rater).data('advice-id');
                   var profile_id = $(rater).data('profile-id');
                   var user_id = $($("#uid")[0]).data('uid');
-                  console.log(user_id)
                   var isPerformance = rater.hasClass("performance");
                   Dajaxice.ratings.click_vote(my_callback, {'value':value, 'advice_id': advice_id, 'profile_id': profile_id, 'isPerformance': isPerformance, 'is_submission': false, 'id_number': user_id});
                 });
@@ -244,8 +272,7 @@ Invest Competition
             </div>
         </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+        <button htype="button" class="btn btn-primary" onclick="location.href = '/thankyou';">Save changes</button>
       </div>
     </div>
   </div>
@@ -260,14 +287,15 @@ Invest Competition
         <h4 class="modal-title" id="myModalLabel">Investment Idea Competition</h4>
       </div>
         <div class="modal-body">
-          You will be presented with four diverse investment ideas to rate on quality and expected performance. Since this is got a competition, all information that can identify the user has been removed. Instead, we will give you some information about the user.
+          By continuing (clicking “I Agree”) you agree that the information presented does not constitute investment advice, recommendations, or solicitations with respect to investment advisory services or products. This information references an opinion and is for information purposes only. Seek a duly licensed professional for investment advice.
         </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">I Agree</button>
       </div>
     </div>
   </div>
 </div>
 <div id="uid" data-uid={{user.user_id}}></div>
 <div id="world" data-world={{world_number}}></div>
+
 {% endblock %}

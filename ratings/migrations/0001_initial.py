@@ -41,35 +41,13 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('profile', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Profile'])),
             ('advice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Advice'])),
-            ('user', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('user_id', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('value', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
             ('is_performance', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('is_submission', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'ratings', ['Vote'])
-
-        # Adding model 'QualityVote'
-        db.create_table(u'ratings_qualityvote', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('profile', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Profile'])),
-            ('advice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Advice'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.User'])),
-            ('value', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
-        ))
-        db.send_create_signal(u'ratings', ['QualityVote'])
-
-        # Adding model 'PerformanceVote'
-        db.create_table(u'ratings_performancevote', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('profile', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Profile'])),
-            ('advice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.Advice'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ratings.User'])),
-            ('value', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
-        ))
-        db.send_create_signal(u'ratings', ['PerformanceVote'])
 
         # Adding model 'UserConnection'
         db.create_table(u'ratings_userconnection', (
@@ -88,6 +66,15 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'ratings', ['World'])
 
+        # Adding model 'Next'
+        db.create_table(u'ratings_next', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user_id', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
+            ('sequence_number', self.gf('django.db.models.fields.IntegerField')(default=0)),
+        ))
+        db.send_create_signal(u'ratings', ['Next'])
+
 
     def backwards(self, orm):
         # Deleting model 'Profile'
@@ -102,17 +89,14 @@ class Migration(SchemaMigration):
         # Deleting model 'Vote'
         db.delete_table(u'ratings_vote')
 
-        # Deleting model 'QualityVote'
-        db.delete_table(u'ratings_qualityvote')
-
-        # Deleting model 'PerformanceVote'
-        db.delete_table(u'ratings_performancevote')
-
         # Deleting model 'UserConnection'
         db.delete_table(u'ratings_userconnection')
 
         # Deleting model 'World'
         db.delete_table(u'ratings_world')
+
+        # Deleting model 'Next'
+        db.delete_table(u'ratings_next')
 
 
     models = {
@@ -125,14 +109,12 @@ class Migration(SchemaMigration):
             'ticker': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'time_scale': ('django.db.models.fields.CharField', [], {'default': "'6 months'", 'max_length': '20'})
         },
-        u'ratings.performancevote': {
-            'Meta': {'object_name': 'PerformanceVote'},
-            'advice': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Advice']"}),
+        u'ratings.next': {
+            'Meta': {'object_name': 'Next'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'profile': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Profile']"}),
+            'sequence_number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.User']"}),
-            'value': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+            'user_id': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
         u'ratings.profile': {
             'Meta': {'object_name': 'Profile'},
@@ -140,15 +122,6 @@ class Migration(SchemaMigration):
             'profile_number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'rep': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'status': ('django.db.models.fields.CharField', [], {'max_length': '20'})
-        },
-        u'ratings.qualityvote': {
-            'Meta': {'object_name': 'QualityVote'},
-            'advice': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Advice']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'profile': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Profile']"}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.User']"}),
-            'value': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
         u'ratings.user': {
             'Meta': {'object_name': 'User'},
@@ -170,7 +143,7 @@ class Migration(SchemaMigration):
             'is_submission': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'profile': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ratings.Profile']"}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {}),
-            'user': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'user_id': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'value': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
         u'ratings.world': {

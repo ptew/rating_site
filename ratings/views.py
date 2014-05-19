@@ -3,12 +3,10 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.utils import timezone
-from ratings.models import Advice, Profile, UserConnection, User, World, Vote
-from dajaxice.decorators import dajaxice_register
-from dajaxice.core import dajaxice_functions
+from ratings.models import *
 import logging
 
-def index(request, user_id):
+def index(request):
 	param_dictionary = {}
 
 	# add callback check to verify they are a registered user
@@ -17,42 +15,35 @@ def index(request, user_id):
 	advice_status = {}
 	profile_dict = {}
 	advice_list = []
+	world_number = 0
 
-	user = User.objects.filter(user_id=int(user_id))
-	if user:
-		user= user[0]
+	ip_address = get_client_ip(request)
+	ip = User.objects.filter(ip_address = ip_address)
+	if ip:
+		user = ip[0]
+
+		# If the user has accessed the site over an hour ago, don't allow them to vote
+		diff = timezone.now() - user.participation_timestamp
+		if diff.seconds > 3600:
+			return render(request, 'ratings/thanks.html')
+
+		# If the ip has submitted votes, don't allow them to vote
+		if Vote.objects.filter(user_id=user.user_id,is_submission = True):
+
+			return render(request, 'ratings/thanks.html')			
+
 		world_number = get_object_or_404(UserConnection, user = user).world_number
-		# world_instances = World.objects.filter(world_number=world_number)
-		# for world in world_instances:
-		# 	advice = world.advice
-		# 	prof = world.profile
-		# 	if prof.profile_number==0 :
-		# 		is_control = True
 
-		# 	advice_rep[advice] = prof.rep
-		# 	advice_status[advice] = prof.status
-		# 	profile_dict[advice] = prof
-		# 	advice_dict[advice.pk] = advice
 	else:
-		user = User(user_id=user_id, participation_timestamp = timezone.now())
+		user_id = randrange(0,1000)
+		while(User.objects.filter(user_id=user_id)):
+			user_id = randrange(0,1000)
+		user = User(user_id=user_id, participation_timestamp = timezone.now(), ip_address = ip_address)
 		user.save()
 
 		world_number = randrange(0,5)
 		user_connect = UserConnection(user=user, world_number=world_number)
 		user_connect.save()
-		# for each advice create a user connection with a random profile
-		# for advice_piece in advice_list:
-		# 	if is_control:
-		# 		prof = control_prof
-		# 	else:
-		# 		prof = get_object_or_404(Profile, profile_number = randrange(1,5))
-		# 	user_connect = UserConnection(user=user, advice=advice_piece, profile=prof)
-		# 	user_connect.save()
-
-		# 	advice_rep[advice_piece] = user_connect.profile.rep
-		# 	advice_status[advice_piece] = user_connect.profile.status
-		# 	profile_dict[advice_piece] = prof
-		# 	advice_dict[advice_piece.pk] = advice_piece
 
 	world_instances = World.objects.filter(world_number=world_number).order_by('?')
 	for world in world_instances:
@@ -66,12 +57,12 @@ def index(request, user_id):
 		advice_dict[advice.pk] = advice
 
 	quality_votes = {}
-	for quality_vote in Vote.objects.filter(user_id = user_id, is_performance=False):
+	for quality_vote in Vote.objects.filter(user_id = user.user_id, is_performance=False):
 		quality_votes[quality_vote.advice.company] = quality_vote.value
 
 	performance_votes = {}
-	for performance_vote in Vote.objects.filter(user_id = user_id, is_performance=True):
-		performance_votes[performance_vote.advice.company] = performance_vote.value
+	for performance_vote in Vote.objects.filter(user_id = user.user_id, is_performance=True):
+		performance_votes[performance_vote.advice.company] = performance_vote.value		
 
 	param_dictionary['advice_list'] = advice_list
 
@@ -87,7 +78,14 @@ def index(request, user_id):
 
 	return render(request, 'ratings/index.html', param_dictionary)
 
-def detail(request, advice_id):
-	advice = get_object_or_404(Advice, pk=advice_id)
-	return render(request, 'ratings/detail.html', {'advice':advice})
+def thankyou(request):
+	return render(request, 'ratings/thanks.html')
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 

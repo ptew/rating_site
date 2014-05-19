@@ -83,6 +83,7 @@ border-left: 1px solid #18242e;
 .company_stats {
 	margin-bottom: 60px;
 	margin-left: 20px;
+	max-width:24%;
 }
 
 .company_info {
@@ -179,7 +180,7 @@ ul.statistics {
 }
 
 .wide{
-	width: 70%;
+	width: 89%;
 	min-width: 1200px;
 	padding-bottom: 20px;
 }
@@ -191,4 +192,13 @@ label.checkbox.inline {
 
 .controls {
 	margin-left: 20px;
+}
+
+.advice-width {
+	max-width:74%;
+}
+
+.thankyou {
+	text-align: center;
+	padding-top:80px;
 }

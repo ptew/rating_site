@@ -22,6 +22,7 @@ class Advice(models.Model):
 
 class User(models.Model):
 	user_id = models.IntegerField(default=0)
+	ip_address = models.CharField(default="0.0.0.0", max_length=20)
 	participation_timestamp = models.DateTimeField('date published')
 
 class Vote(models.Model):
@@ -41,3 +42,8 @@ class World(models.Model):
 	world_number = models.IntegerField(default=0)
 	advice = models.ForeignKey(Advice)
 	profile = models.ForeignKey(Profile)
+
+class Next_Timestamp(models.Model):
+	user_id = models.IntegerField(default=0)
+	timestamp = models.DateTimeField('next timestamp')
+	sequence_number = models.IntegerField(default=0)
