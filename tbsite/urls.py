@@ -8,7 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-    url(r'^', include('ratings.urls')),
+    url(r'^$', include('ratings.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 

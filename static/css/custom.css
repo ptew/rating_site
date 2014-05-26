@@ -202,3 +202,7 @@ label.checkbox.inline {
 	text-align: center;
 	padding-top:80px;
 }
+
+.signal {
+	width: 100%;
+}
