@@ -18,8 +18,9 @@ def index(request):
 	world_number = 0
 
 	ip_address = get_client_ip(request)
+
 	ip = User.objects.filter(ip_address = ip_address)
-	if ip:
+	if ip and not "tbpt" in request.get_full_path():
 		user = ip[0]
 
 		# If the user has accessed the site over an hour ago, don't allow them to vote
