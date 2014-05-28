@@ -38,7 +38,12 @@ Invest Competition
         //   alert("Please vote for both performance and quality.");
         // } else {
         if (quality != 0 && performance != 0) {
+          $('#nextModal').modal("show");
           $('#carousel-id').carousel('next');
+          world = $('.banner_text').text().split('-')[0];
+          var idea_number = sequence_number + 1;
+
+          $('.banner_text').text(world + '- ' + idea_number +"/4");
           $('html, body').animate({ scrollTop: 0 }, 'fast');
           var user_id = $($("#uid")[0]).data('uid');
 
@@ -50,8 +55,29 @@ Invest Competition
       $(window).load(function(){
         var world = $($("#world")[0]).data('world');
         console.log("World: " + world);
-        $('#loadModal').modal('show');
+        // $('#loadModal').modal('show');
+        $('#submitModal-1').modal('show');
     });
+
+    function show_modal_2() {
+      $('#submitModal-1').modal('hide');
+      $('#submitModal-2').modal('show');
+    };
+
+    function show_modal_3() {
+      $('#submitModal-2').modal('hide');
+      $('#submitModal-3').modal('show');
+    };
+
+    function show_modal_4() {
+      $('#submitModal-3').modal('hide');
+      $('#submitModal-4').modal('show');
+    };
+
+    function submit_survey() {
+      window.onbeforeunload = null;
+      location.href = '/thankyou';
+    }
 
     function submit() {
       $(".rateit.vote").each( function() {
@@ -67,12 +93,6 @@ Invest Competition
       });
     }
 
-    $(function ()  
-      { $("[rel=status]").popover({title: 'Status', content: "Status tells us how well the person is respected."});  
-    });
-    $(function ()  
-      { $("[rel=reputation]").popover({title: 'Reputation', content: "Reputation tells us how well the person is respected."});  
-    });
     $(function ()  
       { $("[rel=quality]").popover({title: 'Rate Quality', content: "This measures the extent to which you agree that this idea is high quality. One star represents low quality and five stars represents high quality."});  
     });  
@@ -107,9 +127,9 @@ Invest Competition
                   </div>
                   {% if world_number > 1 %}
                     <div class="left advice-width columns">
-                        <h6 class="signal left" rel="status" data-trigger="hover" data-placement="bottom"><b>This individual's last {{advice_status|get_status:advice}} the market.</b></h6>
+                        <h5 class="signal left" rel="status" data-trigger="hover" data-placement="bottom"><b>This individual's last <u>{{advice_status|get_rand:advice}}</u> investment recommendations have <u>{{advice_status|get_status:advice}}</u> the market.</b></h5>
 
-                        <h6 class="signal left" rel="reputation" data-trigger="hover" data-placement="bottom"><b>In a recent survey by its peers, this individual’s firm was {{advice_rep|get_rep:advice}} out of over 100 firms.</b></h6>
+                        <h5 class="signal left" rel="reputation" data-trigger="hover" data-placement="bottom"><b>In a recent survey ranking the <u>most prestigious</u> firms in the industry, this individual's firm was ranked <u>{{advice_rep|get_rep:advice}} out of 135</u> firms.</b></h5>
                     </div>
                   {% endif %}
                   <div class="advice-width columns">
@@ -129,7 +149,7 @@ Invest Competition
                   
                   <div class="advice-width columns">
                     <div class="rating_left">
-                      <h4 class="left" rel="quality" data-trigger="hover" data-placement="top" data-container="body"><small>Rate Quality: </small></h4>
+                      <h4 class="left" rel="quality" data-trigger="hover" data-placement="top" data-container="body"><small><b>Quality Rating:</b> </small></h4>
                       {% if advice.company in quality_votes %}
                       <input type="range" value={{quality_votes|get_item:advice.company}} max="5" step="1" id="quality-backing-{{forloop.counter}}">
                       <div class="rateit left custom_rating quality vote" data-rateit-backingfld="#quality-backing-{{forloop.counter}}" 
@@ -143,7 +163,7 @@ Invest Competition
                     </div>
 
                     <div class="rating_right">
-                      <h4 class="left" rel="performance" data-trigger="hover" data-placement="top"><small>Rate Expected Performance: </small></h4>
+                      <h4 class="left" rel="performance" data-trigger="hover" data-placement="top"><small><b>Expected Performance Rating:</b> </small></h4>
                       {% if advice.company in performance_votes %}
                       <input type="range" value={{performance_votes|get_item:advice.company}} max="5" step="1" id="performance-backing-{{forloop.counter}}">
                       <div class="rateit left custom_rating performance vote" data-rateit-backingfld="#performance-backing-{{forloop.counter}}" 
@@ -160,7 +180,7 @@ Invest Competition
                   </div>
                   <div class="advice-width columns left">
                     {% if forloop.last %}
-                      <center><button id="submit" class="submit_button btn btn-default" data-toggle="modal" data-target="#submitModal" onclick="submit();">Submit</button></center>
+                      <center><button id="submit" class="submit_button btn btn-default" data-toggle="modal" data-target="#submitModal-1" onclick="submit();">Submit</button></center>
                     {% else %}
                       <center><button id="next_button" class="submit_button btn btn-default" onclick="next_carousel({{forloop.counter}});">Next</button></center>
                     {% endif %}
@@ -196,88 +216,420 @@ Invest Competition
 
 
 <!-- Modal -->
-<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModal" aria-hidden="true">
+<div class="modal fade" id="submitModal-1" tabindex="-1" role="dialog" aria-labelledby="submitModal-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Survey</h4>
+        <h4 class="modal-title" id="myModalLabel">Survey 1/4</h4>
       </div>
         <div class="modal-body">
 
-            <!-- Multiple Radios -->
             <div class="control-group">
-              <label class="control-label" for="radios"><h4>Question 1</h4></label>
+              <label class="question control-label" for="textinput">Enter Age</label>
               <div class="controls">
-                <label class="radio" for="radios-0">
-                  <input type="radio" name="radios" id="radios-0" value="Option one" checked="checked">
-                  Option one
-                </label>
-                <label class="radio" for="radios-1">
-                  <input type="radio" name="radios" id="radios-1" value="Option two">
-                  Option two
-                </label>
-                <label class="radio" for="radios-2">
-                  <input type="radio" name="radios" id="radios-2" value="Option three">
-                  Option three
-                </label>
-                <label class="radio" for="radios-3">
-                  <input type="radio" name="radios" id="radios-3" value="Option four">
-                  Option four
-                </label>
+                <input id="textinput" name="textinput" type="text" placeholder="Age" class="input-small">
               </div>
             </div>
 
-            <!-- Textarea -->
             <div class="control-group">
-              <label class="control-label" for="textarea"><h4>Question 2</h4></label>
-              <div class="controls">                     
-                <textarea id="textarea" name="textarea">default text</textarea>
-              </div>
-            </div>
-
-            <!-- Multiple Checkboxes (inline) -->
-            <div class="control-group">
-              <label class="control-label" for="checkboxes"><h4>Question 3</h4></label>
+              <label class="question control-label" for="checkboxes">Select Gender</label>
               <div class="controls">
                 <label class="checkbox inline" for="checkboxes-0">
                   <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
-                  1
+                  Male
                 </label>
                 <label class="checkbox inline" for="checkboxes-1">
                   <input type="checkbox" name="checkboxes" id="checkboxes-1" value="2">
-                  2
-                </label>
-                <label class="checkbox inline" for="checkboxes-2">
-                  <input type="checkbox" name="checkboxes" id="checkboxes-2" value="3">
-                  3
-                </label>
-                <label class="checkbox inline" for="checkboxes-3">
-                  <input type="checkbox" name="checkboxes" id="checkboxes-3" value="4">
-                  4
-                </label>
-                <label class="checkbox inline" for="checkboxes-4">
-                  <input type="checkbox" name="checkboxes" id="checkboxes-4" value="5">
-                  5
+                  Female
                 </label>
               </div>
             </div>
 
-            <!-- Textarea -->
             <div class="control-group">
-              <label class="control-label" for="textarea"><h4>Question 4</h4></label>
-              <div class="controls">                     
-                <textarea id="textarea" name="textarea">default text</textarea>
+              <label class="question control-label" for="textinput">Enter Years Of Experience</label>
+              <div class="controls">
+                <input id="textinput" name="textinput" type="text" placeholder="Age" class="input-small">
               </div>
             </div>
         </div>
-      <div class="modal-footer">
-        <button htype="button" class="btn btn-primary" onclick="location.href = '/thankyou';">Save changes</button>
+        <div class="modal-footer">
+          <button htype="button" class="btn btn-primary" onclick="show_modal_2();">Continue</button>
       </div>
     </div>
   </div>
 </div>
 
+<div class="modal fade" id="submitModal-2" tabindex="-1" role="dialog" aria-labelledby="submitModal-2" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Survey 2/4</h4>
+      </div>
+        <div class="modal-body">
+          <div class="control-group">
+            <label class="question control-label" for="radios">Familiarity with investment industry</label>
+            <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-7">
+                <input type="radio" name="radios" id="radios-7" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = expert)</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="question control-label" for="radios">I consider my firm a prestigious firm</label>
+            <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-4">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-5">
+                <input type="radio" name="radios" id="radios-5" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = very prestigious)</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="question control-label" for="selectbasic">Of your last three investment recommendations: How many have outperformed its benchmark in a reasonable time frame (e.g., one year)</label>
+            <div class="controls">
+              <select id="selectbasic" name="selectbasic" class="input-small">
+                <option>1 year</option>
+                <option>2 years</option>
+                <option>3 years</option>
+                <option>4 years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="question control-label" for="radios">How familiar are you with Zillow (Z)?</label>
+              <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-4">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-5">
+                <input type="radio" name="radios" id="radios-5" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = expert)</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button htype="button" class="btn btn-primary" onclick="show_modal_3();">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="submitModal-3" tabindex="-1" role="dialog" aria-labelledby="submitModal-3" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Survey 3/4</h4>
+      </div>
+        <div class="modal-body">
+                    <div class="control-group">
+            <label class="question control-label" for="radios">How familiar are you with CoStar (CSGP)?</label>
+              <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-4">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-5">
+                <input type="radio" name="radios" id="radios-5" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = expert)</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="question control-label" for="radios">How familiar are you with NetEase (NTES)?</label>
+              <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-4">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-5">
+                <input type="radio" name="radios" id="radios-5" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = expert)</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="question control-label" for="radios">How familiar are you with Athena Health (ATHN)?</label>
+              <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-4">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-5">
+                <input type="radio" name="radios" id="radios-5" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = expert)</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button htype="button" class="btn btn-primary" onclick="show_modal_4();">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="submitModal-4" tabindex="-1" role="dialog" aria-labelledby="submitModal-4" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Survey 4/4</h4>
+      </div>
+        <div class="modal-body">
+                    <div class="control-group">
+            <label class="question control-label" for="radios">When I rate the quality, reputation influences my rating</label>
+              <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-4">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-5">
+                <input type="radio" name="radios" id="radios-5" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = very much)</p>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="question control-label" for="radios">When I rate the quality, reputation influences my rating</label>
+              <div class="controls">
+              <label class="radio-inline" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="1" checked="checked">
+                1
+              </label>
+              <label class="radio-inline" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="2">
+                2
+              </label>
+              <label class="radio-inline" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="3">
+                3
+              </label>
+              <label class="radio-inline" for="radios-3">
+                <input type="radio" name="radios" id="radios-3" value="4">
+                4
+              </label>
+              <label class="radio-inline" for="radios-4">
+                <input type="radio" name="radios" id="radios-4" value="5">
+                5
+              </label>
+              <label class="radio-inline" for="radios-5">
+                <input type="radio" name="radios" id="radios-5" value="6">
+                6
+              </label>
+              <label class="radio-inline" for="radios-6">
+                <input type="radio" name="radios" id="radios-6" value="7">
+                7
+              </label>
+              <p class="rating-key help-block">(1 = not at all, 7 = very much)</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button htype="button" class="btn btn-primary" onclick="submit_survey();">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="nextModal" tabindex="-1" role="dialog" aria-labelledby="loadModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Advice Feedback</h4>
+      </div>
+      <div class="modal-body">
+          <!-- Multiple Radios -->
+          <div class="control-group">
+            <label class="question control-label" for="radios"><h4>Select One</h4></label>
+            <div class="controls">
+              <label class="radio" for="radios-0">
+                <input type="radio" name="radios" id="radios-0" value="Option one" checked="checked">
+                I would publicly endorse this idea
+              </label>
+              <label class="radio" for="radios-1">
+                <input type="radio" name="radios" id="radios-1" value="Option two">
+                I would anonymously endorse this idea
+              </label>
+              <label class="radio" for="radios-2">
+                <input type="radio" name="radios" id="radios-2" value="Option three">
+                I would not endorse this idea
+              </label>
+            </div>
+          </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="loadModal" aria-hidden="true">
   <div class="modal-dialog">
