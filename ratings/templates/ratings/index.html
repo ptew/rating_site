@@ -55,8 +55,7 @@ Invest Competition
       $(window).load(function(){
         var world = $($("#world")[0]).data('world');
         console.log("World: " + world);
-        // $('#loadModal').modal('show');
-        $('#submitModal-1').modal('show');
+        $('#loadModal').modal('show');
     });
 
     function submit_feedback() {
@@ -67,6 +66,7 @@ Invest Competition
 
       if (value > 0) {
         Dajaxice.ratings.save_advice_feedback(saved,{'id_number': user_id, 'advice_id':advice_id, 'profile_id':profile_id,'value':value});
+        var value = $('input[name=feedback]:checked').removeAttr("checked");
         $('#nextModal').modal('hide');
       }
     }
