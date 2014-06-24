@@ -19,6 +19,9 @@ def index(request):
 
 	ip_address = get_client_ip(request)
 
+	world_numbers = [x for x in range(5)]
+	shuffle(world_numbers)
+
 	ip = User.objects.filter(ip_address = ip_address)
 	if ip and not "tbpt" in request.get_full_path():
 		user = ip[0]
